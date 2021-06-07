@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import cx_Oracle
 
 # Nos conectamos como el usuario todo con password "123" al localhost y puerto 1521.
@@ -26,3 +27,10 @@ for fname, lname in cursor:
 
 
 connection.close()
+=======
+lista=["24", "43", "66"]
+perro, gato, zorro=lista
+print(gato, zorro, perro)
+gato=int(gato)
+print(type(gato))
+>>>>>>> f77d7d63ccfec89c65857a56b3349b8cc0c056f7
