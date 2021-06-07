@@ -23,18 +23,7 @@ cursor.execute (
         )
     """
 )
+INSERT INTO "TODO"."PERSONA" (FIRST_NAME, LAST_NAME) VALUES ('MARCELO', 'MENDOZA')
 
-
-# Esto funcionará solo si hay registros en la tabla
-cursor.execute (
-    """
-        SELECT first_name, last_name
-        FROM Persona 
-    """
-)
-
-
-for fname, lname in cursor:
-    print("Values:", fname, lname)
 
 connection.close()
