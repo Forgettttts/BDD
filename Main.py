@@ -16,7 +16,7 @@ try:
     )
     """
     )
-except -cx_Oracle.DatabaseError:
+except cx_Oracle.DatabaseError:
     print("nel prro")
 
 
@@ -25,7 +25,6 @@ comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
 for linea_leida in regiones_archivo:
     NombreRegion, CodigoRegion, CodigoComuna = linea_leida.strip(
         "\n").split(",")
-    print("result: ", NombreRegion)
 
 for linea_leida in comunas_archivo:
     Comuna, CodigoComuna, Poblacion, CasosConfirmados = linea_leida.strip(
