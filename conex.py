@@ -23,7 +23,6 @@ cursor.execute (
         )
     """
 )
-INSERT INTO "TODO"."PERSONA" (FIRST_NAME, LAST_NAME) VALUES ('MARCELO', 'MENDOZA')
 
 
 connection.close()
