@@ -14,7 +14,7 @@ cursor.execute(
         PRIMARY KEY(person_id)
     )
     """
-    )
+)cx_Oracle.DatabaseError: ORA-00955: este nombre ya lo est� utilizando otro objeto existente
 
 regiones_archivo = open("RegionesComunas.csv", "r")
 comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
