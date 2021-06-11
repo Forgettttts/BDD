@@ -42,17 +42,16 @@ for linea_leida in regiones_archivo:
     NombreRegion, CodigoRegion, CodigoComuna = linea_leida.strip("\n").split(",")
     if(NombreRegion == "Region"):
         continue
-    update_cpr = """
-        INSERT INTO CASOS_POR_REGION(
-            CodigoRegion,
-            NombreRegion,
-            Poblacion,
-            CasosConfirmados,
-        )
-        VALUES({},'{}', 0, 0)
-        """.format(CodigoRegion, NombreRegion)
-    cursor.execute(update_cpr)
-print("Tabla Region creada con éxito. \n")
+    try:
+        cursor.execute(
+            """
+            INSERT INTO CASOS_POR_REGION
+            VALUES(:1,:2, 0, 0)
+            """,[int(CodigoRegion), NombreRegion]
+            )
+    except Exception:
+        continue
+    print("Tabla Region creada con éxito. \n")
 
 for linea_leida in comunas_archivo:
     NombreComuna, CodigoComuna, Poblacion, CasosConfirmados = linea_leida.strip("\n").split(",")
@@ -62,7 +61,7 @@ for linea_leida in comunas_archivo:
         CodReg = CodigoComuna[0:2]
     elif(len(CodigoComuna) == 5):
         CodReg=CodigoComuna[0:1]
-    update_cpr="""
+    update_cpc="""
         INSERT INTO CASOS_POR_COMUNA(
             CodigoRegion,
             NombreComuna,
@@ -72,7 +71,7 @@ for linea_leida in comunas_archivo:
         )
         VALUES({},'{}',{},{},{})
         """.format(CodReg,NombreComuna,CodigoComuna, Poblacion, CasosConfirmados)
-    cursor.execute(update_cpr)
+    cursor.execute(update_cpc)
 print("Tabla Comunas creada con éxito. \n")
 
 regiones_archivo.close()
