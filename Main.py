@@ -58,9 +58,9 @@ for linea_leida in comunas_archivo:
     if(NombreComuna == "Comuna"):
         continue
     if (len(CodigoComuna) == 4):
-        CodReg = CodigoComuna[0:2]
+        CodReg = CodigoComuna[0:1]
     elif(len(CodigoComuna) == 5):
-        CodReg=CodigoComuna[0:1]
+        CodReg=CodigoComuna[0:2]
     try:
         cursor.execute(
             """
