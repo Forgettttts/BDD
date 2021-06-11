@@ -35,8 +35,8 @@ try:
     )
 except cx_Oracle.DatabaseError:
     print("Tabla CASOS_POR_COMUNA ya fue creada")
-regiones_archivo = open("RegionesComunas.csv", "r")
-comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
+regiones_archivo = open("RegionesComunas.csv", "r", encoding="utf-8")
+comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r", encoding="utf-8")
 
 for linea_leida in regiones_archivo:
     NombreRegion, CodigoRegion, CodigoComuna = linea_leida.strip("\n").split(",")
@@ -66,7 +66,7 @@ for linea_leida in comunas_archivo:
             """
             INSERT INTO CASOS_POR_COMUNA
             VALUES(:1, :2, :3, :4, :5)
-            """, [int(CodigoRegion), NombreComuna, int(CodigoComuna), int(Poblacion), int(CasosConfirmados)]
+            """, [int(CodReg), NombreComuna, int(CodigoComuna), int(Poblacion), int(CasosConfirmados)]
         )
     except Exception:
         continue
