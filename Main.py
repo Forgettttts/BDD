@@ -6,7 +6,8 @@ print("Database version:", connection.version)
 cursor = connection.cursor()
 
 try:
-    cursor.execute(
+    cursor.execute
+    (
         """
     CREATE TABLE CASOS_POR_REGION(
         CodigoRegion NUMBER NOT NULL,
@@ -45,7 +46,7 @@ except cx_Oracle.DatabaseError:
 regiones_archivo = open("RegionesComunas.csv", "r")
 comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
 
-for linea_leida, otra_linea in regiones_archivo, comunas_archivo:
+for linea_leida in regiones_archivo:
     NombreRegion, CodigoRegion, CodigoComuna = linea_leida.strip("\n").split(",")
 
 for linea_leida in comunas_archivo:
@@ -53,7 +54,7 @@ for linea_leida in comunas_archivo:
 
 regiones_archivo.close()
 comunas_archivo.close()
-
+connection.commit()
 connection.close()
 
 
