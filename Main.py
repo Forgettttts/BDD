@@ -51,7 +51,7 @@ for linea_leida in regiones_archivo:
             )
     except Exception:
         continue
-    print("Tabla Region creada con éxito. \n")
+print("Tabla Region creada con éxito. \n")
 
 for linea_leida in comunas_archivo:
     NombreComuna, CodigoComuna, Poblacion, CasosConfirmados = linea_leida.strip("\n").split(",")
@@ -61,17 +61,15 @@ for linea_leida in comunas_archivo:
         CodReg = CodigoComuna[0:2]
     elif(len(CodigoComuna) == 5):
         CodReg=CodigoComuna[0:1]
-    update_cpc="""
-        INSERT INTO CASOS_POR_COMUNA(
-            CodigoRegion,
-            NombreComuna,
-            CodigoComuna,
-            Poblacion,
-            CasosConfirmados
+    try:
+        cursor.execute(
+            """
+            INSERT INTO CASOS_POR_COMUNA
+            VALUES(:1, :2, :3, :4, :5)
+            """, [int(CodigoRegion), NombreComuna, int(CodigoComuna), int(Poblacion), int(CasosConfirmados)]
         )
-        VALUES({},'{}',{},{},{})
-        """.format(CodReg,NombreComuna,CodigoComuna, Poblacion, CasosConfirmados)
-    cursor.execute(update_cpc)
+    except Exception:
+        continue
 print("Tabla Comunas creada con éxito. \n")
 
 regiones_archivo.close()
