@@ -15,11 +15,10 @@ try:
         Poblacion NUMBER NOT NULL,
         CasosConfirmados NUMBER NOT NULL,
 
-        PRIMARY KEY(CodigoRegion)
+        CONSTRAINT PK_REGION PRIMARY KEY(CodigoRegion)
     )
     """
     )
-
 except cx_Oracle.DatabaseError:
     print("Tabla CASOS_POR_REGION ya fue creada")
 
@@ -32,16 +31,14 @@ try:
         CodigoComuna NUMBER NOT NULL,
         Poblacion NUMBER NOT NULL,
         CasosConfirmados NUMBER NOT NULL,
-        FOREIGN KEY(CodigoRegion) REFERENCES CASOS_POR_REGION(CodigoRegion)
-        PRIMARY KEY(CodigoComuna)
+        CONSTRAINT FK_COMUNA FOREIGN KEY(CodigoRegion) REFERENCES CASOS_POR_REGION(CodigoRegion),
+        CONSTRAINT PK_COMUNA PRIMARY KEY(CodigoComuna)
 
     )
     """
     )
 except cx_Oracle.DatabaseError:
     print("Tabla CASOS_POR_COMUNA ya fue creada")
-
-
 
 regiones_archivo = open("RegionesComunas.csv", "r")
 comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
