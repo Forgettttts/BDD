@@ -50,8 +50,7 @@ for linea_leida in comunas_archivo:
         CodReg = CodigoRegion[0:2]
     elif(len(CodigoRegion) == 5):
         CodReg=CodigoRegion[0:1]
-    cursor.execute(
-        """
+    update_cpr="""
         INSERT INTO CASOS_POR_COMUNA(
             CodigoRegion,
             NombreComuna,
@@ -59,16 +58,12 @@ for linea_leida in comunas_archivo:
             Poblacion,
             CasosConfirmados
         )
-        VALUES(
-            
-        )
-        """
-    )
+        VALUES({},'{}',{},{},{})
+        """.format(CodReg,NombreComuna,CodigoComuna, Poblacion, CasosConfirmados)
+    cursor.execute(update_cpr)
+    print("Tabla Comunas creada con éxito. \n")
 
 regiones_archivo.close()
 comunas_archivo.close()
 connection.commit()
 connection.close()
-
-
-
