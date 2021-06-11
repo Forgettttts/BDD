@@ -40,9 +40,30 @@ comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
 
 for linea_leida in regiones_archivo:
     NombreRegion, CodigoRegion, CodigoComuna = linea_leida.strip("\n").split(",")
+    
 
 for linea_leida in comunas_archivo:
     NombreComuna, CodigoComuna, Poblacion, CasosConfirmados = linea_leida.strip("\n").split(",")
+    if(NombreComuna == "Comuna"):
+        continue
+    if (len(CodigoRegion) == 4):
+        CodReg = CodigoRegion[0:2]
+    elif(len(CodigoRegion) == 5):
+        CodReg=CodigoRegion[0:1]
+    cursor.execute(
+        """
+        INSERT INTO CASOS_POR_COMUNA(
+            CodigoRegion,
+            NombreComuna,
+            CodigoComuna,
+            Poblacion,
+            CasosConfirmados
+        )
+        VALUES(
+            
+        )
+        """
+    )
 
 regiones_archivo.close()
 comunas_archivo.close()
