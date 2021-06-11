@@ -40,7 +40,19 @@ comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
 
 for linea_leida in regiones_archivo:
     NombreRegion, CodigoRegion, CodigoComuna = linea_leida.strip("\n").split(",")
-    
+    if(NombreRegion == "Region"):
+        continue
+    update_cpr = """
+        INSERT INTO CASOS_POR_REGION(
+            CodigoRegion,
+            NombreRegion,
+            Poblacion,
+            CasosConfirmados,
+        )
+        VALUES({},'{}', 0, 0)
+        """.format(CodigoRegion, NombreRegion)
+    cursor.execute(update_cpr)
+print("Tabla Region creada con éxito. \n")
 
 for linea_leida in comunas_archivo:
     NombreComuna, CodigoComuna, Poblacion, CasosConfirmados = linea_leida.strip("\n").split(",")
@@ -61,7 +73,7 @@ for linea_leida in comunas_archivo:
         VALUES({},'{}',{},{},{})
         """.format(CodReg,NombreComuna,CodigoComuna, Poblacion, CasosConfirmados)
     cursor.execute(update_cpr)
-    print("Tabla Comunas creada con éxito. \n")
+print("Tabla Comunas creada con éxito. \n")
 
 regiones_archivo.close()
 comunas_archivo.close()
