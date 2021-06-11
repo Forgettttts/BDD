@@ -8,23 +8,6 @@ cursor = connection.cursor()
 try:
     cursor.execute(
         """
-    CREATE TABLE  CASOS_POR_COMUNA (
-        CodigoRegion NUMBER NOT NULL,
-        NombreComuna VARCHAR2(50) NOT NULL,
-        CodigoComuna NUMBER NOT NULL,
-        Poblacion NUMBER NOT NULL,
-        CasosConfirmados NUMBER NOT NULL,
-
-        PRIMARY KEY(CodigoComuna)
-    )
-    """
-    )
-except cx_Oracle.DatabaseError:
-    print("Tabla CASOS_POR_COMUNA ya fue creada")
-
-try:
-    cursor.execute(
-        """
     CREATE TABLE CASOS_POR_REGION(
         CodigoRegion NUMBER NOT NULL,
         NombreRegion VARCHAR2(50) NOT NULL,
@@ -35,25 +18,29 @@ try:
     )
     """
     )
-except cx_Oracle.DatabaseError:
-    print("Tabla CASOS_POR_REGION ya fue creada")
 
 except cx_Oracle.DatabaseError:
-    print("Tabla CASOS_POR_COMUNA ya fue creada")
+    print("Tabla CASOS_POR_REGION ya fue creada")
 
 try:
     cursor.execute(
         """
-    CREATE TABLE COMUNAS_EN_REGION(
+    CREATE TABLE  CASOS_POR_COMUNA (
         CodigoRegion NUMBER NOT NULL,
+        NombreComuna VARCHAR2(50) NOT NULL,
         CodigoComuna NUMBER NOT NULL,
+        Poblacion NUMBER NOT NULL,
+        CasosConfirmados NUMBER NOT NULL,
+        FOREIGN KEY(CodigoRegion) REFERENCES CASOS_POR_REGION(CodigoRegion)
+        PRIMARY KEY(CodigoComuna)
 
-        PRIMARY KEY(CodigoRegion, CodigoComuna)
     )
     """
     )
 except cx_Oracle.DatabaseError:
-    print("Tabla COMUNAS_EN_REGION ya fue creada")
+    print("Tabla CASOS_POR_COMUNA ya fue creada")
+
+
 
 regiones_archivo = open("RegionesComunas.csv", "r")
 comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
