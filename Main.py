@@ -1,4 +1,5 @@
 import cx_Oracle
+from prettytable import PrettyTable
 
 # Nos conectamos como el usuario todo con password "123" al localhost y puerto 1521.
 connection = cx_Oracle.connect("TODO", "123", "localhost:1521")
@@ -174,13 +175,14 @@ def casos_totales_region(CodigoReg):
     region, casos = cursor.fetchone()
     print("Casos de la región:", region, "=", casos, "[casos]. \n")
 
+
 def casos_total_todas_comunas():
-    sumador=0 #Variable donde se sumaran los casos
+    tabla = PrettyTable(["Comuna", "Casos totales"])
     cursor.execute(""" SELECT * FROM CASOS_POR_COMUNA """)
     fila = cursor.fetchall()
     for datos in fila:
-        sumador += int(datos[4])
-    print("Casos totales comunas=", sumador)
+        tabla.add_row([datos[1], datos[4]])
+    print(tabla)
 
 casos_total_todas_comunas()
 connection.close()
