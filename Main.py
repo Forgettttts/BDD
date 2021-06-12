@@ -132,4 +132,37 @@ def crear_comuna(NombreNuevo, CodigoNuevo):
     connection.commit()
     print("Comuna de:", NombreNuevo, "con el código:", CodigoNuevo, "creada con éxito.\n")
 
+
+def crear_region(NombreNuevo, CodigoNuevo):
+    try:
+        #? Revision de existencia previa en tabla del nombre y/o codigo
+        db = """ SELECT * FROM CASOS_POR_REGION """
+        cursor.execute(db)
+        fila = cursor.fetchall()
+        for datos in fila:
+            NomReg = datos[1]
+            CodReg = datos[2]
+            if NombreNuevo.upper() == NomReg.upper():
+                print("Nombre de región ya en uso, por favor, intente con otro.\n")
+                if int(CodigoNuevo) == int(CodReg):
+                    print(
+                        "También el código de región ya en uso, por favor, intente con otro.\n")
+                return
+            if int(CodigoNuevo) == int(CodReg):
+                print("Codigo de región ya en uso, por favor, intente con otro.\n")
+                return
+    except Exception:
+        print(
+            "Error en revisar la existencia previa del nombre o del codigo de la región.\n")
+    cursor.execute(
+        """
+        INSERT INTO CASOS_POR_REGION
+        VALUES(:1,:2, 0, 0)
+        """, [int(CodigoNuevo), NombreNuevo]
+        )
+    connection.commit()
+    print("Región de:", NombreNuevo, "con el código:",CodigoNuevo, "creada con éxito.\n")
+
+crear_region("Joselandia", "15")
+
 connection.close()

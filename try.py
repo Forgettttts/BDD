@@ -10,4 +10,4 @@ for linea_leida in regiones_archivo:
 perro="Aysen"
 lista=[]
 lista.append(perro)
-print(lista)
+print(perro, perro.upper())
