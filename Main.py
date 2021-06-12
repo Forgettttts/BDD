@@ -184,5 +184,13 @@ def casos_total_todas_comunas():
         tabla.add_row([datos[1], datos[4]])
     print(tabla)
 
-casos_total_todas_comunas()
+def casos_total_todas_regiones():
+    tabla = PrettyTable(["Región", "Casos totales"])
+    cursor.execute(""" SELECT * FROM CASOS_POR_REGION """)
+    fila = cursor.fetchall()
+    for datos in fila:
+        tabla.add_row([datos[2], datos[3]])
+    print(tabla)
+
+casos_total_todas_regiones()
 connection.close()
