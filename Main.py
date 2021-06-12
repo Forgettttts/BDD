@@ -166,8 +166,12 @@ def crear_region(NombreNuevo, CodigoNuevo):
 def casos_totales_comuna(CodigoCom):
     cursor.execute("""SELECT NombreComuna, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""",[str(CodigoCom)])
     comuna, casos = cursor.fetchone()
-    print("Casos de la comuna:", comuna, "=", casos, "casos. \n")
+    print("Casos de la comuna:", comuna, "=", casos, "[casos]. \n")
 
-casos_totales_comuna(15101)
+
+def casos_totales_region(CodigoReg):
+    cursor.execute("""SELECT NombreRegion, CasosConfirmados FROM CASOS_POR_REGION WHERE CodigoRegion=:1""", [str(CodigoReg)])
+    region, casos = cursor.fetchone()
+    print("Casos de la región:", region, "=", casos, "[casos]. \n")
 
 connection.close()
