@@ -51,7 +51,7 @@ for linea_leida in regiones_archivo:
             )
     except Exception:
         continue
-print("Tabla Region creada con éxito. \n")
+    print("Tabla Region creada con éxito. \n")
 
 for linea_leida in comunas_archivo:
     NombreComuna, CodigoComuna, PoblacionComuna, CasosConfirmadosComuna = linea_leida.strip("\n").split(",")
@@ -77,9 +77,11 @@ for linea_leida in comunas_archivo:
         WHERE CodigoRegion= :3
         """,[int(CasosConfirmadosComuna), int(PoblacionComuna), int(CodReg)]
     )
-print("Tabla Comunas creada con éxito. \n")
+    print("Tabla Comunas creada con éxito. \n")
 connection.commit()
 
+regiones_archivo.close()
+comunas_archivo.close()
 def crear_comuna(NombreNuevo, CodigoNuevo):
     try:
         #? Revision de existencia previa en tabla del nombre y/o codigo
@@ -87,31 +89,32 @@ def crear_comuna(NombreNuevo, CodigoNuevo):
         cursor.execute(db)
         fila=cursor.fetchall()
         for datos in fila:
-            NomCom= fila[1]
-            CodCom= fila[2]
+            NomCom= datos[1]
+            CodCom= datos[2]
             if NombreNuevo == NomCom:
                 print("Nombre de comuna ya en uso, por favor, intente con otro.\n")
-                if CodigoNuevo == CodCom:
+                if int(CodigoNuevo) == int(CodCom):
                     print("También el código de comuna ya en uso, por favor, intente con otro.\n")
                 return
-            if CodigoNuevo == CodCom:
+            if int(CodigoNuevo) == int(CodCom):
                 print("Codigo de comuna ya en uso, por favor, intente con otro.\n")
                 return
     except Exception:
         print("Error en revisar la existencia previa del nombre o del codigo de comuna.\n")
+
+    RegionExistente = False
     try:
         #? Revision de existencia de la region
         db = """ SELECT * FROM CASOS_POR_REGION """
         cursor.execute(db)
         fila = cursor.fetchall()
         if (len(CodigoNuevo) == 4):
-            CodiRegi = CodigoComuna[0:1]
+            CodiRegi = CodigoNuevo[0:1]
         elif(len(CodigoNuevo) == 5):
-            CodiRegi = CodigoComuna[0:2]
-        RegionExistente = False
+            CodiRegi = CodigoNuevo[0:2]
         for datos in fila:
-            CodigoDeLaRegion = fila[0]
-            if CodigoDeLaRegion == CodiRegi:
+            CodigoDeLaRegion = datos[0]
+            if int(CodigoDeLaRegion) == int(CodiRegi):
                 RegionExistente=True
                 break
     except Exception:
@@ -127,8 +130,6 @@ def crear_comuna(NombreNuevo, CodigoNuevo):
     """, [int(CodiRegi), NombreNuevo, int(CodigoNuevo)]
     )
     connection.commit()
+    print("Comuna de:", NombreNuevo, "con el código:", CodigoNuevo, "creada con éxito.\n")
 
-
-regiones_archivo.close()
-comunas_archivo.close()
 connection.close()

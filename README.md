@@ -1,1 +1,1 @@
-para crear comuna, se debe entregar el nombre de la region, y el codigo de la region, si es que alguno de los dos ya existe, se printeara un error, inicialmente la comuna tendra 0 personas
+para crear comuna, se debe entregar el nombre de la region, y el codigo de la region, si es que alguno de los dos ya existe, se printeara un error, inicialmente la comuna tendra 0 personas. La entrada diferencia entre mayusculas y minusculas, por lo que puede existir una comuna Torres del Paine y otra llamada Torres del paine.
