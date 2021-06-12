@@ -189,7 +189,7 @@ def casos_total_todas_regiones():
     cursor.execute(""" SELECT * FROM CASOS_POR_REGION """)
     fila = cursor.fetchall()
     for datos in fila:
-        tabla.add_row([datos[2], datos[3]])
+        tabla.add_row([datos[1], datos[3]])
     print(tabla)
 
 casos_total_todas_regiones()
