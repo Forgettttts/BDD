@@ -1,4 +1,4 @@
-regiones_archivo = open("RegionesComunas.csv", "r")
+""""regiones_archivo = open("RegionesComunas.csv", "r")
 comunas_archivo = open("CasosConfirmadosPorComuna.csv", "r")
 
 for linea_leida in regiones_archivo:
@@ -6,3 +6,8 @@ for linea_leida in regiones_archivo:
         "\n").split(",")
     print(NombreRegion)
     break
+"""
+perro="Aysen"
+lista=[]
+lista.append(perro)
+print(lista)
