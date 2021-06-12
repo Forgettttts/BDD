@@ -227,6 +227,46 @@ def añadir_casos_comuna(CodComuna, Nuevos):
     )
     connection.commit()
     print("Casos activos, actualizados con éxito.\n")
+
+
+def eliminar_casos_comuna(CodComuna, Nuevos):
+    try:
+        existencia_comuna = False
+        db = """ SELECT * FROM CASOS_POR_COMUNA """
+        cursor.execute(db)
+        fila = cursor.fetchall()
+        for datos in fila:
+            CodCom = datos[2]
+            if int(CodComuna) == int(CodCom):
+                existencia_comuna = True
+                break
+    except Exception:
+        print("Error en revisar la existencia de la comuna a actualizar.\n")
+    if (existencia_comuna == False):
+        print("Comuna no existente, ingrese una existente o cree una nueva.\n")
+        return
+    cursor.execute(
+        """
+        UPDATE CASOS_POR_COMUNA
+        SET CasosConfirmados=CasosConfirmados- :1
+        WHERE CodigoComuna= :2
+        """, [int(Nuevos), int(CodComuna)]
+    )
+    if (len(CodComuna) == 4):
+        CodiRegi = CodComuna[0:1]
+    elif(len(CodComuna) == 5):
+        CodiRegi = CodComuna[0:2]
+    cursor.execute(
+        """
+        UPDATE CASOS_POR_REGION
+        SET CasosConfirmados=CasosConfirmados- :1
+        WHERE CodigoRegion= :2
+        """, [int(Nuevos), int(CodiRegi)]
+    )
+    connection.commit()
+    print("Casos activos, actualizados con éxito.\n")
+
+eliminar_casos_comuna("15101", "100000")
 añadir_casos_comuna("15101","100000")
 casos_total_todas_comunas()
 casos_total_todas_regiones()
