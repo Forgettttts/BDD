@@ -163,6 +163,12 @@ def crear_region(NombreNuevo, CodigoNuevo):
     connection.commit()
     print("Región de:", NombreNuevo, "con el código:",CodigoNuevo, "creada con éxito.\n")
 
-crear_region("Joselandia", "15")
+def casos_totales_comuna(CodigoCom):
+    db = """SELECT NombreComuna, CasosComuna FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""",[CodigoCom]
+    cursor.execute(db)
+    fila = cursor.fetcHONE()
+    print(fila)
+
+casos_totales_comuna(15101)
 
 connection.close()
