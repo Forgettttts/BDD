@@ -133,7 +133,6 @@ def crear_comuna(NombreNuevo, CodigoNuevo):
     connection.commit()
     print("Comuna de:", NombreNuevo, "con el código:", CodigoNuevo, "creada con éxito.\n")
 
-
 def crear_region(NombreNuevo, CodigoNuevo):
     try:
         #? Revision de existencia previa en tabla del nombre y/o codigo
@@ -192,5 +191,40 @@ def casos_total_todas_regiones():
         tabla.add_row([datos[2], datos[3]])
     print(tabla)
 
-casos_total_todas_regiones()
+def añadir_casos_comuna(CodComuna, Nuevos):
+    try:
+        existencia_comuna=False
+        db = """ SELECT * FROM CASOS_POR_COMUNA """
+        cursor.execute(db)
+        fila = cursor.fetchall()
+        for datos in fila:
+            CodCom = datos[2]
+            if int(CodComuna) == int(CodCom):
+                existencia_comuna=True
+                break
+    except Exception:
+        print("Error en revisar la existencia de la comuna a actualizar.\n")
+    if (existencia_comuna==False):
+        print("Comuna no existente, ingrese una existente o cree una nueva.\n")
+        return
+    cursor.execute(
+        """
+        UPDATE CASOS_POR_COMUNA
+        SET CasosConfirmados=CasosConfirmados+ :1
+        WHERE CodigoComuna= :2
+        """, [int(Nuevos), int(CodComuna)]
+    )
+    if (len(CodComuna) == 4):
+        CodiRegi = CodComuna[0:1]
+    elif(len(CodComuna) == 5):
+        CodiRegi = CodComuna[0:2]
+    cursor.execute(
+        """
+        UPDATE CASOS_POR_REGION
+        SET CasosConfirmados=CasosConfirmados+ :1
+        WHERE CodigoRegion= :2
+        """, [int(Nuevos), int(CodiRegi)]
+    )
+    print("Casos activos, actualizados con éxito.\n")
+
 connection.close()
