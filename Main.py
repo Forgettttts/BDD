@@ -174,4 +174,11 @@ def casos_totales_region(CodigoReg):
     region, casos = cursor.fetchone()
     print("Casos de la región:", region, "=", casos, "[casos]. \n")
 
+def casos_total_comunas():
+    sumador=0 #Variable donde se sumaran los casos
+    cursor.execute(""" SELECT * FROM CASOS_POR_COMUNA """)
+    fila = cursor.fetchall()
+    for datos in fila:
+        sumador += int(datos[4])
+    print("Casos totales comunas=", sumador)
 connection.close()
