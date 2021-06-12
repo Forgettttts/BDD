@@ -225,6 +225,9 @@ def añadir_casos_comuna(CodComuna, Nuevos):
         WHERE CodigoRegion= :2
         """, [int(Nuevos), int(CodiRegi)]
     )
+    connection.commit()
     print("Casos activos, actualizados con éxito.\n")
-
+añadir_casos_comuna("15101","100000")
+casos_total_todas_comunas()
+casos_total_todas_regiones()
 connection.close()
