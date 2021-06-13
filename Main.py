@@ -328,7 +328,7 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
             cursor.execute("""DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
             connection.commit()
             print("Comunas combinadas de manera exitosa.\n")
-        if int(Cm)==2:
+        elif int(Cm)==2:
             #Copiamos datos de la comuna a eliminar
             cursor.execute(
                 """SELECT NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
@@ -347,6 +347,10 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
                 """DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
             connection.commit()
             print("Comunas combinadas de manera exitosa.\n")
+        else:
+            print("Debe seleccionar entre 1 (que se unan en la 1era comuna ingresada) o 2 (union en la 2da comuna ingresada).\n")
+            return
+
     else: #comunas son de distintas regiones
         if int(Cm) == 1:
             #Copiamos datos de la comuna a eliminar
@@ -387,7 +391,7 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
                 """DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
             connection.commit()
             print("Comunas combinadas de manera exitosa.\n")
-        if int(Cm) == 2:
+        elif int(Cm) == 2:
             #Copiamos datos de la comuna a eliminar
             cursor.execute(
                 """SELECT CodigoRegion, NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
@@ -427,6 +431,76 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
                 """DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
             connection.commit()
             print("Comunas combinadas de manera exitosa.\n")
+        else:
+            print("Debe seleccionar entre 1 (que se unan en la 1era comuna ingresada) o 2 (union en la 2da comuna ingresada).\n")
+            return
 
+def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
+    try:
+        existencia_region = False
+        db = """ SELECT * FROM CASOS_POR_REGION """
+        cursor.execute(db)
+        fila = cursor.fetchall()
+        for datos in fila:
+            CodReg = datos[2]
+            if int(CodigoPrimera) == int(CodReg):
+                existencia_region = True
+                break
+    except Exception:
+        print("Error en revisar la existencia de la primera region a combinar.\n")
+    if (existencia_region == False):
+        print("La primera region no existe, ingrese una existente o cree una nueva.\n")
+        return
+    
+    try:
+        existencia_region = False
+        db = """ SELECT * FROM CASOS_POR_REGION """
+        cursor.execute(db)
+        fila = cursor.fetchall()
+        for datos in fila:
+            CodReg = datos[2]
+            if int(CodigoSegunda) == int(CodReg):
+                existencia_region = True
+                break
+    except Exception:
+        print("Error en revisar la existencia de la segunda region a combinar.\n")
+    if (existencia_region == False):
+        print("La segunda region no existe, ingrese una existente o cree una nueva.\n")
+        return
+    if int(Elegida)==1:#Se juntaran en la primera region
+        C2=CodigoSegunda
+        C1=CodigoPrimera
+    elif int(Elegida)==2:#Se juntaran en la segunda region
+        C1=CodigoSegunda
+        C2=CodigoPrimera
+    else:
+        print("Debe seleccionar entre 1 (que se unan en la 1era region ingresada) o 2 (union en la 2da region ingresada).\n")
+        return
+    #?Copiamos datos de la Region a eliminar, C1=REGION DESTINO, C2=REGION A ELIMINAR
+    cursor.execute("""SELECT NombreRegion, Poblacion, CasosConfirmados FROM CASOS_POR_REGION WHERE CodigoRegion=:1""", [C2])
+    NameTemp,PoblaTemp, CasosTemp= cursor.fetchone()
+    print("Copiando datos desde la region de",NameTemp,"...\n")
+    #Colocamos los datos en la region de destino
+    cursor.execute(
+        """
+        UPDATE CASOS_POR_REGION
+        SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
+        WHERE CodigoComuna= :3
+        """, [int(CasosTemp), int(PoblaTemp), int(C1)]
+        )
+    #actualizamos los datos de las comunas, las comunas de la region a eliminar, se añaden en la comuna de destino
+    cursor.execute(
+        """
+        UPDATE CASOS_POR_COMUNA
+        SET CodigoRegion=:1, CodigoComuna=(CodigoComuna-1000*:2)+(:1*1000)
+        WHERE CodigoRegion= :2
+        """, [int(C1),int(C2)]
+    )
+
+    #eliminando la region que no se mantendra
+    cursor.execute(
+        """DELETE FROM CASOS_POR_REGION WHERE CodigoRegion=:1""", [C2])
+    connection.commit()
+    print("Comunas combinadas de manera exitosa.\n")
 combinar_comuna("2202", "15202", "2")
 connection.close()
