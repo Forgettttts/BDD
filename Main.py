@@ -506,8 +506,8 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
 def contagiados_por_comuna():
     cursor.execute(
         """
-        CREATE VIEW CONTAGIADOS_COMUNA AS
-        SELECT NombreComuna, Round(((CasosConfirmados/Poblacion)*100),1) AS CONTAGIADOS_POR_COMUNA
+        CREATE OR REPLACE VIEW CONTAGIADOS_COMUNA AS
+        SELECT NombreComuna, Round(((CasosConfirmados/Poblacion)*100),2) AS CONTAGIADOS_POR_COMUNA
         FROM CASOS_POR_COMUNA
         WHERE Poblacion <> 0
         ORDER BY CONTAGIADOS_POR_COMUNA DESC
@@ -517,8 +517,8 @@ def contagiados_por_comuna():
 def contagiados_por_region():
     cursor.execute(
         """
-        CREATE VIEW CONTAGIADOS_REGION AS
-        SELECT NombreRegion, Round(((CasosConfirmados/Poblacion)*100),1) AS CONTAGIADOS_POR_REGION
+        CREATE OR REPLACE VIEW CONTAGIADOS_REGION AS
+        SELECT NombreRegion, Round(((CasosConfirmados/Poblacion)*100),2) AS CONTAGIADOS_POR_REGION
         FROM CASOS_POR_REGION
         WHERE Poblacion <> 0
         ORDER BY CONTAGIADOS_POR_REGION DESC
@@ -535,11 +535,27 @@ def mas_confirmados_comuna():
     except Exception as err:
         print("Error al mostrar 5 comunas mas contagiadas.\n")
         return
-    tabla = PrettyTable(["Comuna", "Porcentaje positividad"])
+    tabla = PrettyTable(["Comuna", "Porcentaje positividad [%]"])
     for linea in podio:
         tabla.add_row([linea[0], linea[1]])
     print(tabla)
 
 
+def mas_confirmados_region():
+    try:
+        cursor.execute(
+            """
+            SELECT * FROM CONTAGIADOS_REGION 
+            """)
+        podio = cursor.fetchmany(5)
+    except Exception as err:
+        print("Error al mostrar 5 regiones mas contagiadas.\n")
+        return
+    tabla = PrettyTable(["Región", "Porcentaje positividad [%]"])
+    for linea in podio:
+        tabla.add_row([linea[0], linea[1]])
+    print(tabla)
+contagiados_por_region()
+mas_confirmados_region()
 
 connection.close()
