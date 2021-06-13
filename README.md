@@ -5,3 +5,5 @@ crear region ya no es sensible a las mayusculas, por lo que no puede haber una r
 para obtener casos por comuna y casos por region, se debe pedir con el codigo correspondiente
 
 se necesita importar previamente libreria prettytable, usada para mostrar casos totales
+
+Al momentop de combinar regiones y comunas, se juntaran ambas en alguna de las dos, el usuario elige cual

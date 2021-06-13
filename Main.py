@@ -502,5 +502,43 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         """DELETE FROM CASOS_POR_REGION WHERE CodigoRegion=:1""", [C2])
     connection.commit()
     print("Comunas combinadas de manera exitosa.\n")
+
+def contagiados_por_comuna():
+    cursor.execute(
+        """
+        CREATE VIEW CONTAGIADOS_COMUNA AS
+        SELECT NombreComuna, Round(((CasosConfirmados/Poblacion)*100),1) AS CONTAGIADOS_POR_COMUNA
+        FROM CASOS_POR_COMUNA
+        WHERE Poblacion <> 0
+        ORDER BY CONTAGIADOS_POR_COMUNA DESC
+        """
+    )
+
+def contagiados_por_region():
+    cursor.execute(
+        """
+        CREATE VIEW CONTAGIADOS_REGION AS
+        SELECT NombreRegion, Round(((CasosConfirmados/Poblacion)*100),1) AS CONTAGIADOS_POR_REGION
+        FROM CASOS_POR_REGION
+        WHERE Poblacion <> 0
+        ORDER BY CONTAGIADOS_POR_REGION DESC
+        """
+    )
+
+def mas_confirmados_comuna():
+    try:
+        cursor.execute(
+            """
+            SELECT * FROM CONTAGIADOS_COMUNA 
+            """)
+        podio=cursor.fetchmany(5)
+    except Exception as err:
+        print("Error al mostrar 5 comunas mas contagiadas.\n")
+        return
+    tabla = PrettyTable(["Comuna", "Porcentaje positividad"])
+    for linea in podio:
+        tabla.add_row([linea[0], linea[1]])
+    print(tabla)
+
 combinar_comuna("2202", "15202", "2")
 connection.close()
