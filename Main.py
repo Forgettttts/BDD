@@ -311,7 +311,7 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
     elif(len(C2) == 5):
         CodiRegi2 = C2[0:2]
     if CodiRegi1==CodiRegi2: #Las comunas pertenecen a la misma region
-        if Cm==1:
+        if int(Cm)==1:
             #Copiamos datos de la comuna a eliminar
             cursor.execute("""SELECT NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
             Name,PoblaTemp, CasosTemp= cursor.fetchone()
@@ -325,9 +325,10 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
                 """, [int(CasosTemp), int(PoblaTemp), int(C1)]
                 )
             #eliminando la comuna que no se mantendra
-            cursor.execute("""DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C2])
+            cursor.execute("""DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
             connection.commit()
-        if Cm==2:
+            print("Comunas combinadas de manera exitosa.\n")
+        if int(Cm)==2:
             #Copiamos datos de la comuna a eliminar
             cursor.execute(
                 """SELECT NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
@@ -343,10 +344,11 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
             )
             #eliminando la comuna que no se mantendra
             cursor.execute(
-                """DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C1])
+                """DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
             connection.commit()
+            print("Comunas combinadas de manera exitosa.\n")
     else: #comunas son de distintas regiones
-        if Cm == 1:
+        if int(Cm) == 1:
             #Copiamos datos de la comuna a eliminar
             cursor.execute(
                 """SELECT CodigoRegion, NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
@@ -370,8 +372,9 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
             )
             #Sumamos en la region de destino
             cursor.execute(
-                """SELECT CodigoRegion FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
-            CodDest = cursor.fetchone()
+                """SELECT CodigoRegion, NombreRegion FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
+            CodDest, NomDest = cursor.fetchone()
+            print("Actualizando datos de la region de destino (", NomDest,")\n")
             cursor.execute(
                 """
                 UPDATE CASOS_POR_REGION
@@ -381,9 +384,10 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
             )
             #eliminando la comuna que no se mantendra
             cursor.execute(
-                """DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C2])
+                """DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
             connection.commit()
-        if Cm == 2:
+            print("Comunas combinadas de manera exitosa.\n")
+        if int(Cm) == 2:
             #Copiamos datos de la comuna a eliminar
             cursor.execute(
                 """SELECT CodigoRegion, NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
@@ -408,8 +412,9 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
             )
             #Sumamos en la region de destino
             cursor.execute(
-                """SELECT CodigoRegion FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
-            CodDest = cursor.fetchone()
+                """SELECT CodigoRegion, NombreComuna FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
+            CodDest, NomDest = cursor.fetchone()
+            print("Actualizando datos de la region de destino (", NomDest, ")\n")
             cursor.execute(
                 """
                 UPDATE CASOS_POR_REGION
@@ -419,8 +424,9 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
             )
             #eliminando la comuna que no se mantendra
             cursor.execute(
-                """DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C1])
+                """DELETE FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
             connection.commit()
+            print("Comunas combinadas de manera exitosa.\n")
 
-combinar_comuna(15101, 15102, 1)
+combinar_comuna("2202", "15202", "2")
 connection.close()
