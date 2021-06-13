@@ -265,6 +265,20 @@ def eliminar_casos_comuna(CodComuna, Nuevos):
     )
     connection.commit()
     print("Casos activos, actualizados con éxito.\n")
+#CodigoAMantener puede ser 1 o 2, en el caso de que sea 1, los datos del 2 se suman al primero, viceversa con el caso de que sea =2
+def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
+    if (len(CodigoPrimero) == 4):
+        CodiRegi1 = CodigoPrimero[0:1]
+    elif(len(CodigoPrimero) == 5):
+        CodiRegi1 = CodigoPrimero[0:2]
+    if (len(CodigoSegundo) == 4):
+        CodiRegi2 = CodigoSegundo[0:1]
+    elif(len(CodigoSegundo) == 5):
+        CodiRegi2 = CodigoSegundo[0:2]
+    if CodiRegi1==CodiRegi2: #Las comunas pertenecen a regiones distintas
+        if CodigoAMantener==1:
+            cursor.execute("""SELECT * FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [str(CodigoSegundo)])
+            print(cursor.fetchall())
 
 eliminar_casos_comuna("15101", "100000")
 añadir_casos_comuna("15101","100000")
