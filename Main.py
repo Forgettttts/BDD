@@ -154,6 +154,7 @@ def crear_region(NombreNuevo, CodigoNuevo):
     except Exception:
         print(
             "Error en revisar la existencia previa del nombre o del codigo de la región.\n")
+    #Si es que se llega hasta aca es porque se puede crear sin problemas de codigo
     cursor.execute(
         """
         INSERT INTO CASOS_POR_REGION
@@ -164,34 +165,45 @@ def crear_region(NombreNuevo, CodigoNuevo):
     print("Región de:", NombreNuevo, "con el código:",CodigoNuevo, "creada con éxito.\n")
 
 def casos_totales_comuna(CodigoCom):
+    #Se buscan los datos, correspondientes al codigo de comuna entregado
     cursor.execute("""SELECT NombreComuna, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""",[str(CodigoCom)])
     comuna, casos = cursor.fetchone()
+    #Se printean resultados
     print("Casos de la comuna:", comuna, "=", casos, "[casos]. \n")
 
 
 def casos_totales_region(CodigoReg):
+    #Se buscan los datos, correspondientes al codigo de region entregado
     cursor.execute("""SELECT NombreRegion, CasosConfirmados FROM CASOS_POR_REGION WHERE CodigoRegion=:1""", [str(CodigoReg)])
     region, casos = cursor.fetchone()
+    #Se printean resultados
     print("Casos de la región:", region, "=", casos, "[casos]. \n")
 
 
 def casos_total_todas_comunas():
+    #Se genera la tabla donde se mostraran resultados
     tabla = PrettyTable(["Comuna", "Casos totales"])
-    cursor.execute(""" SELECT * FROM CASOS_POR_COMUNA """)
+    cursor.execute(""" SELECT * FROM CASOS_POR_COMUNA """)#Se buscan resultados
     fila = cursor.fetchall()
+    #se rellena tabla con resultados
     for datos in fila:
         tabla.add_row([datos[1], datos[4]])
+    #se muestran resultados
     print(tabla)
 
 def casos_total_todas_regiones():
+    #Se genera la tabla donde se mostraran resultados
     tabla = PrettyTable(["Región", "Casos totales"])
-    cursor.execute(""" SELECT * FROM CASOS_POR_REGION """)
+    cursor.execute(""" SELECT * FROM CASOS_POR_REGION """)#Se buscan resultados
     fila = cursor.fetchall()
+    #se rellena tabla con resultados
     for datos in fila:
         tabla.add_row([datos[1], datos[3]])
+    #se muestran resultados
     print(tabla)
 
 def añadir_casos_comuna(CodComuna, Nuevos):
+    #se revisa si es que la comuna existe
     try:
         existencia_comuna=False
         db = """ SELECT * FROM CASOS_POR_COMUNA """
@@ -207,6 +219,7 @@ def añadir_casos_comuna(CodComuna, Nuevos):
     if (existencia_comuna==False):
         print("Comuna no existente, ingrese una existente o cree una nueva.\n")
         return
+    #si es que llegamos aqui, es pq la comuna existe, y se procede
     cursor.execute(
         """
         UPDATE CASOS_POR_COMUNA
@@ -218,6 +231,7 @@ def añadir_casos_comuna(CodComuna, Nuevos):
         CodiRegi = CodComuna[0:1]
     elif(len(CodComuna) == 5):
         CodiRegi = CodComuna[0:2]
+    #se actualizan datos de la region
     cursor.execute(
         """
         UPDATE CASOS_POR_REGION
@@ -230,6 +244,7 @@ def añadir_casos_comuna(CodComuna, Nuevos):
 
 
 def eliminar_casos_comuna(CodComuna, Nuevos):
+    #se revisa si es que la comuna existe
     try:
         existencia_comuna = False
         db = """ SELECT * FROM CASOS_POR_COMUNA """
@@ -245,6 +260,7 @@ def eliminar_casos_comuna(CodComuna, Nuevos):
     if (existencia_comuna == False):
         print("Comuna no existente, ingrese una existente o cree una nueva.\n")
         return
+    #si es que llegamos aqui, es pq la comuna existe, y se procede
     cursor.execute(
         """
         UPDATE CASOS_POR_COMUNA
@@ -256,6 +272,7 @@ def eliminar_casos_comuna(CodComuna, Nuevos):
         CodiRegi = CodComuna[0:1]
     elif(len(CodComuna) == 5):
         CodiRegi = CodComuna[0:2]
+    #se actualizan datos de region
     cursor.execute(
         """
         UPDATE CASOS_POR_REGION
@@ -265,8 +282,10 @@ def eliminar_casos_comuna(CodComuna, Nuevos):
     )
     connection.commit()
     print("Casos activos, actualizados con éxito.\n")
+
 #CodigoAMantener puede ser 1 o 2, en el caso de que sea 1, los datos del 2 se suman al primero, viceversa con el caso de que sea =2
 def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
+    #Se revisa la existencia de ambas comunas
     try:
         existencia_comuna = False
         db = """ SELECT * FROM CASOS_POR_COMUNA """
@@ -302,6 +321,7 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
     C1=CodigoPrimero
     C2=CodigoSegundo
     Cm=CodigoAMantener
+    #Se revisa si es que son de la misma region o no
     if (len(C1) == 4):
         CodiRegi1 = C1[0:1]
     elif(len(C1) == 5):
@@ -504,6 +524,7 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
     print("Regiones combinadas de manera exitosa.\n")
 
 def contagiados_por_comuna():
+    #view para comunas
     cursor.execute(
         """
         CREATE OR REPLACE VIEW CONTAGIADOS_COMUNA AS
@@ -511,10 +532,11 @@ def contagiados_por_comuna():
         FROM CASOS_POR_COMUNA
         WHERE Poblacion <> 0
         ORDER BY CONTAGIADOS_POR_COMUNA DESC
-        """
+        """#se calculo directamente el porcentaje, con dos cifras decimales
     )
 
 def contagiados_por_region():
+    #view para regiones
     cursor.execute(
         """
         CREATE OR REPLACE VIEW CONTAGIADOS_REGION AS
@@ -522,10 +544,11 @@ def contagiados_por_region():
         FROM CASOS_POR_REGION
         WHERE Poblacion <> 0
         ORDER BY CONTAGIADOS_POR_REGION DESC
-        """
+        """#se calculo directamente el porcentaje, con dos cifras decimales
     )
 
 def mas_confirmados_comuna():
+    #Se extraen los datos desde la tabla de origen
     try:
         cursor.execute(
             """
@@ -535,13 +558,17 @@ def mas_confirmados_comuna():
     except Exception as err:
         print("Error al mostrar 5 comunas mas contagiadas.\n")
         return
+    #se crea la tabla
     tabla = PrettyTable(["Comuna", "Porcentaje positividad [%]"])
+    #se rellena la tabla
     for linea in podio:
         tabla.add_row([linea[0], linea[1]])
+    #se muestra la tabla
     print(tabla)
 
 
 def mas_confirmados_region():
+    #Se extraen los datos desde la tabla de origen
     try:
         cursor.execute(
             """
@@ -551,11 +578,77 @@ def mas_confirmados_region():
     except Exception as err:
         print("Error al mostrar 5 regiones mas contagiadas.\n")
         return
+    #se crea la tabla
     tabla = PrettyTable(["Región", "Porcentaje positividad [%]"])
+    #se rellena la tabla
     for linea in podio:
         tabla.add_row([linea[0], linea[1]])
+    #se muestra la tabla
     print(tabla)
-contagiados_por_region()
-mas_confirmados_region()
 
+print("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°\n Bienvenido a la Base de datos Chilena del COVID-21 \n A contiuación se presentan varias opciones, seleccione a traves de su número cual quiere ejecutar:\n\n")
+
+print("1)Crear Comuna. \n")
+print("2)Crear región. \n")
+print("3)Ver casos de alguna comuna. \n")
+print("4)Ver casos de alguna región. \n")
+print("5)Ver casos comunas. \n")
+print("6)Ver casos regiónes. \n")
+print("7)Añadir casos a una comuna. \n")
+print("8)Eliminar casos en una comuna. \n")
+print("9)Combinar comunas. \n")
+print("10)Combinar regiones. \n")
+print("11)Ver top 5, de contagios por comuna. \n")
+print("12)Ver top 5 de contagios por región. \n")
+print("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°\n")
+accion=input("Ingrese su elección, ingrese 999 para terminar.")
+while(accion!="999"):
+    if accion =="1":
+        NewName=input("Ingrese nombre de la nueva comuna:\n")
+        NewCode=input("Ingrese código de la nueva comuna:\n")
+        crear_comuna(NewName, NewCode)
+    elif accion == "2":
+        NewName = input("Ingrese nombre de la nueva región:\n")
+        NewCode = input("Ingrese código de la nueva región:\n")
+        crear_region(NewName, NewCode)
+    elif accion =="3":
+        ComunaSeleccionada= input("Ingrese el código de la comuna de interés:\n")
+        casos_totales_comuna(ComunaSeleccionada)
+    elif accion =="4":
+        RegiónSeleccionada= input("Ingrese el código de la región de interés:\n")
+        casos_totales_comuna(RegiónSeleccionada)
+    elif accion =="5":
+        casos_total_todas_comunas()
+    elif accion =="6":
+        casos_total_todas_regiones()
+    elif accion =="7":
+        ComunaInteres=input("Ingrese código de la comuna a ingresar nuevos casos:\n")
+        NewCases=input("Ingrese cantidad de casos nuevos:\n")
+        añadir_casos_comuna(ComunaInteres, NewCases)
+    elif accion == "8":
+        ComunaInteres = input(
+            "Ingrese código de la comuna a eliminar casos:\n")
+        LessCases = input("Ingrese cantidad de casos a eliminar:\n")
+        eliminar_casos_comuna(ComunaInteres, LessCases)
+
+    elif accion =="9":
+        print("A continuacion se le pediran los codigos de las 2 comunas a combinar, y luego debera ingresar 1 si es que quiere combinar EN LA PRIMERA COMUNA o 2 si es que quiere combinar EN LA SEGUNDA COMUNA:\n")
+        CodigoComunaUno= input("Ingrese codigo de la primera comuna:\n")
+        CodigoComunaDos = input("Ingrese codigo de la segunda comuna:\n")
+        MantenerEn= input("Elija en que comuna combinar (1 o 2)(la comuna que mantendra sus datos sera aquella en la que se combine):\n")
+        combinar_comuna(CodigoComunaUno, CodigoComunaDos, MantenerEn)
+
+    elif accion =="10":
+        print("A continuación se le pediran los codigos de ambas regiones a combinar ademas de la region en la que se desean combinar, 1 para combinar en LA PRIMERA REGIÓN o 2 para combinar en LA SEGUNA REGIÓN:\n")
+        CodigoRegionUno=input("Ingrese el codigo de la primera región a combinar:\n")
+        CodigoRegionDOs=input("Ingrese el codigo de la segunda región a combinar:\n")
+        MantenerEn = input("Elija en que región combinar (1 o 2)(la comuna que mantendra sus datos sera aquella en la que se combine):\n")
+    elif accion == "11":
+        mas_confirmados_comuna()
+    elif accion == "12":
+        mas_confirmados_region()
+    else:
+        print("Acción desconocida, revise bien la lista de opciones e intente nuevamente...\n")
+
+print("Sesion terminada\n")
 connection.close()
