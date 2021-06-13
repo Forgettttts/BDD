@@ -312,17 +312,115 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
         CodiRegi2 = C2[0:2]
     if CodiRegi1==CodiRegi2: #Las comunas pertenecen a la misma region
         if Cm==1:
+            #Copiamos datos de la comuna a eliminar
             cursor.execute("""SELECT NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
             Name,PoblaTemp, CasosTemp= cursor.fetchone()
-            print("Copiando datos desde la segunda comuna a la primera...\n")
+            print("Copiando datos desde la comuna de",Name,"...\n")
+            #Colocamos los datos en la comuna de destino
             cursor.execute(
                 """
                 UPDATE CASOS_POR_COMUNA
                 SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
-
                 WHERE CodigoComuna= :3
                 """, [int(CasosTemp), int(PoblaTemp), int(C1)]
                 )
+            #eliminando la comuna que no se mantendra
+            cursor.execute("""DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C2])
+            connection.commit()
+        if Cm==2:
+            #Copiamos datos de la comuna a eliminar
+            cursor.execute(
+                """SELECT NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
+            Name, PoblaTemp, CasosTemp = cursor.fetchone()
+            print("Copiando datos desde la comuna de", Name, "...\n")
+            #Colocamos los datos en la comuna de destino
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_COMUNA
+                SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
+                WHERE CodigoComuna= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(C2)]
+            )
+            #eliminando la comuna que no se mantendra
+            cursor.execute(
+                """DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C1])
+            connection.commit()
+    else: #comunas son de distintas regiones
+        if Cm == 1:
+            #Copiamos datos de la comuna a eliminar
+            cursor.execute(
+                """SELECT CodigoRegion, NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
+            CodTemp, Name, PoblaTemp, CasosTemp = cursor.fetchone()
+            print("Copiando datos desde la comuna de", Name, "...\n")
+            #Restamos desde la region de origen
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_REGION
+                SET CasosConfirmados=CasosConfirmados- :1, Poblacion=Poblacion-:2
+                WHERE CodigoRegion= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(CodTemp)]
+            )
+            #Colocamos los datos en la comuna de destino
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_COMUNA
+                SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
+                WHERE CodigoComuna= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(C1)]
+            )
+            #Sumamos en la region de destino
+            cursor.execute(
+                """SELECT CodigoRegion FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
+            CodDest = cursor.fetchone()
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_REGION
+                SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+ :2
+                WHERE CodigoRegion= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(CodDest)]
+            )
+            #eliminando la comuna que no se mantendra
+            cursor.execute(
+                """DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C2])
+            connection.commit()
+        if Cm == 2:
+            #Copiamos datos de la comuna a eliminar
+            cursor.execute(
+                """SELECT CodigoRegion, NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
+            CodTemp, Name, PoblaTemp, CasosTemp = cursor.fetchone()
+            print("Copiando datos desde la comuna de", Name, "...\n")
+            #Restamos desde la region de origen
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_REGION
+                SET CasosConfirmados=CasosConfirmados- :1, Poblacion=Poblacion-:2
+                WHERE CodigoRegion= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(CodTemp)]
+            )
+
+            #Colocamos los datos en la comuna de destino
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_COMUNA
+                SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
+                WHERE CodigoComuna= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(C2)]
+            )
+            #Sumamos en la region de destino
+            cursor.execute(
+                """SELECT CodigoRegion FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
+            CodDest = cursor.fetchone()
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_REGION
+                SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+ :2
+                WHERE CodigoRegion= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(CodDest)]
+            )
+            #eliminando la comuna que no se mantendra
+            cursor.execute(
+                """DELETE FROM CASOS_POR_COMUNA WHERE WHERE CodigoComuna=:1""", [C1])
+            connection.commit()
 
 combinar_comuna(15101, 15102, 1)
 connection.close()
