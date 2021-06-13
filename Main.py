@@ -52,7 +52,7 @@ for linea_leida in regiones_archivo:
             )
     except Exception:
         continue
-    print("Tabla Region creada con éxito. \n")
+print("Tabla Region creada con éxito. \n")
 
 for linea_leida in comunas_archivo:
     NombreComuna, CodigoComuna, PoblacionComuna, CasosConfirmadosComuna = linea_leida.strip("\n").split(",")
@@ -78,7 +78,7 @@ for linea_leida in comunas_archivo:
         WHERE CodigoRegion= :3
         """,[int(CasosConfirmadosComuna), int(PoblacionComuna), int(CodReg)]
     )
-    print("Tabla Comunas creada con éxito. \n")
+print("Tabla Comunas creada con éxito. \n")
 connection.commit()
 
 regiones_archivo.close()
@@ -442,7 +442,7 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         cursor.execute(db)
         fila = cursor.fetchall()
         for datos in fila:
-            CodReg = datos[2]
+            CodReg = datos[0]
             if int(CodigoPrimera) == int(CodReg):
                 existencia_region = True
                 break
@@ -458,7 +458,7 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         cursor.execute(db)
         fila = cursor.fetchall()
         for datos in fila:
-            CodReg = datos[2]
+            CodReg = datos[0]
             if int(CodigoSegunda) == int(CodReg):
                 existencia_region = True
                 break
@@ -485,23 +485,23 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         """
         UPDATE CASOS_POR_REGION
         SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
-        WHERE CodigoComuna= :3
+        WHERE CodigoRegion= :3
         """, [int(CasosTemp), int(PoblaTemp), int(C1)]
         )
     #actualizamos los datos de las comunas, las comunas de la region a eliminar, se añaden en la comuna de destino
     cursor.execute(
         """
         UPDATE CASOS_POR_COMUNA
-        SET CodigoRegion=:1, CodigoComuna=(CodigoComuna-1000*:2)+(:1*1000)
+        SET CodigoRegion=:1, CodigoComuna=(CodigoComuna-1000* :2)+(:1 *1000)+111
         WHERE CodigoRegion= :2
         """, [int(C1),int(C2)]
-    )
+    )#se le debe sumar 111 al codigo comuna, para que no hayan conflictos entre los codigos de comuna y sigan el formato usado
 
     #eliminando la region que no se mantendra
     cursor.execute(
         """DELETE FROM CASOS_POR_REGION WHERE CodigoRegion=:1""", [C2])
     connection.commit()
-    print("Comunas combinadas de manera exitosa.\n")
+    print("Regiones combinadas de manera exitosa.\n")
 
 def contagiados_por_comuna():
     cursor.execute(
@@ -540,5 +540,6 @@ def mas_confirmados_comuna():
         tabla.add_row([linea[0], linea[1]])
     print(tabla)
 
-combinar_comuna("2202", "15202", "2")
+
+
 connection.close()
