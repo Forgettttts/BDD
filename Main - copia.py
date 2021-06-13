@@ -586,71 +586,8 @@ def mas_confirmados_region():
 
 print("---------------------------------------------------------------------------------------------------------\n Bienvenido a la Base de datos Chilena del COVID-21 \n A contiuación se presentan varias opciones, seleccione a traves de su número cual quiere ejecutar:\n\n")
 
-print("1)Crear Comuna.")
-print("2)Crear región.")
-print("3)Ver casos de alguna comuna.")
-print("4)Ver casos de alguna región.")
-print("5)Ver casos comunas.")
-print("6)Ver casos regiónes.")
-print("7)Añadir casos a una comuna.")
-print("8)Eliminar casos en una comuna.")
-print("9)Combinar comunas.")
-print("10)Combinar regiones.")
-print("11)Ver top 5, de contagios por comuna.")
-print("12)Ver top 5 de contagios por región. \n")
-print("---------------------------------------------------------------------------------------------------------\n")
-accion=input("Ingrese su elección, ingrese 999 para terminar: \n")
-while(accion!="999"):
-    if accion =="1":
-        NewName=input("Ingrese nombre de la nueva comuna:\n")
-        NewCode=input("Ingrese código de la nueva comuna:\n")
-        crear_comuna(NewName, NewCode)
-    elif accion == "2":
-        NewName = input("Ingrese nombre de la nueva región:\n")
-        NewCode = input("Ingrese código de la nueva región:\n")
-        crear_region(NewName, NewCode)
-    elif accion =="3":
-        ComunaSeleccionada= input("Ingrese el código de la comuna de interés:\n")
-        casos_totales_comuna(ComunaSeleccionada)
-    elif accion =="4":
-        Rs= input("Ingrese el código de la región de interés:\n")
-        casos_totales_region(Rs)
-    elif accion =="5":
-        casos_total_todas_comunas()
-    elif accion =="6":
-        casos_total_todas_regiones()
-    elif accion =="7":
-        ComunaInteres=input("Ingrese código de la comuna a ingresar nuevos casos:\n")
-        NewCases=input("Ingrese cantidad de casos nuevos:\n")
-        añadir_casos_comuna(ComunaInteres, NewCases)
-    elif accion == "8":
-        ComunaInteres = input(
-            "Ingrese código de la comuna a eliminar casos:\n")
-        LessCases = input("Ingrese cantidad de casos a eliminar:\n")
-        eliminar_casos_comuna(ComunaInteres, LessCases)
-
-    elif accion =="9":
-        print("A continuacion se le pediran los codigos de las 2 comunas a combinar, y luego debera ingresar 1 si es que quiere combinar EN LA PRIMERA COMUNA o 2 si es que quiere combinar EN LA SEGUNDA COMUNA:\n")
-        CodigoComunaUno= input("Ingrese codigo de la primera comuna:\n")
-        CodigoComunaDos = input("Ingrese codigo de la segunda comuna:\n")
-        MantenerEn= input("Elija en que comuna combinar (1 o 2)(la comuna que mantendra sus datos sera aquella en la que se combine):\n")
-        combinar_comuna(CodigoComunaUno, CodigoComunaDos, MantenerEn)
-
-    elif accion =="10":
-        print("A continuación se le pediran los codigos de ambas regiones a combinar ademas de la region en la que se desean combinar, 1 para combinar en LA PRIMERA REGIÓN o 2 para combinar en LA SEGUNA REGIÓN:\n")
-        CodigoRegionUno=input("Ingrese el codigo de la primera región a combinar:\n")
-        CodigoRegionDOs=input("Ingrese el codigo de la segunda región a combinar:\n")
-        MantenerEn = input("Elija en que región combinar (1 o 2)(la comuna que mantendra sus datos sera aquella en la que se combine):\n")
-        combinar_regiones(CodigoRegionUno, CodigoRegionDOs, MantenerEn)
-    elif accion == "11":
-        contagiados_por_comuna()
-        mas_confirmados_comuna()
-    elif accion == "12":
-        contagiados_por_region()
-        mas_confirmados_region()
-    else:
-        print("Acción desconocida, revise bien la lista de opciones e intente nuevamente...\n")
-    accion = input("Ingrese su elección, ingrese 999 para terminar: \n")
+casos_totales_region("15")
+casos_totales_comuna("15101")
 
 print("Sesion terminada\n")
 connection.close()
