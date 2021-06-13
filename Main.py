@@ -267,21 +267,62 @@ def eliminar_casos_comuna(CodComuna, Nuevos):
     print("Casos activos, actualizados con éxito.\n")
 #CodigoAMantener puede ser 1 o 2, en el caso de que sea 1, los datos del 2 se suman al primero, viceversa con el caso de que sea =2
 def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
-    if (len(CodigoPrimero) == 4):
-        CodiRegi1 = CodigoPrimero[0:1]
-    elif(len(CodigoPrimero) == 5):
-        CodiRegi1 = CodigoPrimero[0:2]
-    if (len(CodigoSegundo) == 4):
-        CodiRegi2 = CodigoSegundo[0:1]
-    elif(len(CodigoSegundo) == 5):
-        CodiRegi2 = CodigoSegundo[0:2]
-    if CodiRegi1==CodiRegi2: #Las comunas pertenecen a regiones distintas
-        if CodigoAMantener==1:
-            cursor.execute("""SELECT * FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [str(CodigoSegundo)])
-            print(cursor.fetchall())
+    try:
+        existencia_comuna = False
+        db = """ SELECT * FROM CASOS_POR_COMUNA """
+        cursor.execute(db)
+        fila = cursor.fetchall()
+        for datos in fila:
+            CodCom = datos[2]
+            if int(CodigoPrimero) == int(CodCom):
+                existencia_comuna = True
+                break
+    except Exception:
+        print("Error en revisar la existencia de la comuna a actualizar.\n")
+    if (existencia_comuna == False):
+        print("La primera comuna no existe, ingrese una existente o cree una nueva.\n")
+        return
+    try:
+        existencia_comuna = False
+        db = """ SELECT * FROM CASOS_POR_COMUNA """
+        cursor.execute(db)
+        fila = cursor.fetchall()
+        for datos in fila:
+            CodCom = datos[2]
+            if int(CodigoSegundo) == int(CodCom):
+                existencia_comuna = True
+                break
+    except Exception:
+        print("Error en revisar la existencia de la comuna a actualizar.\n")
+    if (existencia_comuna == False):
+        print("La segunda comuna no existe, ingrese una existente o cree una nueva.\n")
+        return
 
-eliminar_casos_comuna("15101", "100000")
-añadir_casos_comuna("15101","100000")
-casos_total_todas_comunas()
-casos_total_todas_regiones()
+    #A este punto ya se sabe que ambos codigos de comuna, existen en la tabla
+    C1=CodigoPrimero
+    C2=CodigoSegundo
+    Cm=CodigoAMantener
+    if (len(C1) == 4):
+        CodiRegi1 = C1[0:1]
+    elif(len(C1) == 5):
+        CodiRegi1 = C1[0:2]
+    if (len(C2) == 4):
+        CodiRegi2 = C2[0:1]
+    elif(len(C2) == 5):
+        CodiRegi2 = C2[0:2]
+    if CodiRegi1==CodiRegi2: #Las comunas pertenecen a la misma region
+        if Cm==1:
+            cursor.execute("""SELECT NombreComuna, Poblacion, CasosConfirmados FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C2])
+            Name,PoblaTemp, CasosTemp= cursor.fetchone()
+            print("Copiando datos desde la segunda comuna a la primera...\n")
+            cursor.execute(
+                """
+                UPDATE CASOS_POR_COMUNA
+                SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
+
+                WHERE CodigoComuna= :3
+                """, [int(CasosTemp), int(PoblaTemp), int(C1)]
+                )
+
+combinar_comuna(15101, 15102, 1)
 connection.close()
