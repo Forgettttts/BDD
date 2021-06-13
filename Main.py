@@ -442,7 +442,7 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         cursor.execute(db)
         fila = cursor.fetchall()
         for datos in fila:
-            CodReg = datos[2]
+            CodReg = datos[0]
             if int(CodigoPrimera) == int(CodReg):
                 existencia_region = True
                 break
@@ -458,7 +458,7 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         cursor.execute(db)
         fila = cursor.fetchall()
         for datos in fila:
-            CodReg = datos[2]
+            CodReg = datos[0]
             if int(CodigoSegunda) == int(CodReg):
                 existencia_region = True
                 break
@@ -485,14 +485,14 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         """
         UPDATE CASOS_POR_REGION
         SET CasosConfirmados=CasosConfirmados+ :1, Poblacion=Poblacion+:2
-        WHERE CodigoComuna= :3
+        WHERE CodigoRegion= :3
         """, [int(CasosTemp), int(PoblaTemp), int(C1)]
         )
     #actualizamos los datos de las comunas, las comunas de la region a eliminar, se añaden en la comuna de destino
     cursor.execute(
         """
         UPDATE CASOS_POR_COMUNA
-        SET CodigoRegion=:1, CodigoComuna=(CodigoComuna-1000*:2)+(:1*1000)
+        SET CodigoRegion=:1 #!Revisar si es que es necesario actualizar el codigo de comuna
         WHERE CodigoRegion= :2
         """, [int(C1),int(C2)]
     )
@@ -502,5 +502,5 @@ def combinar_regiones(CodigoPrimera, CodigoSegunda, Elegida):
         """DELETE FROM CASOS_POR_REGION WHERE CodigoRegion=:1""", [C2])
     connection.commit()
     print("Comunas combinadas de manera exitosa.\n")
-combinar_comuna("2202", "15202", "2")
+combinar_regiones("15", "1", "1")
 connection.close()
