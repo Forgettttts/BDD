@@ -78,7 +78,26 @@ for linea_leida in comunas_archivo:
         """,[int(CasosConfirmadosComuna), int(PoblacionComuna), int(CodReg)]
     )
 connection.commit()
-
+try:
+    cursor.execute(
+        """
+        CREATE OR REPLACE TRIGGER CasosNegativosRegion 
+        AFTER UPDATE ON CASOS_POR_REGION
+        FOR EACH ROW
+        BEGIN
+            IF :new.CasosConfirmados < 0 THEN
+                :new.CasosConfirmados = 0;
+            END IF;
+            If :new.Poblacion < 0 THEN
+                :new.Poblacion = 0;
+            END IF;
+        END
+        """
+        )
+    connection.commit()
+    
+except cx_Oracle.DatabaseError:
+    print("Trigger ya creado")
 regiones_archivo.close()
 comunas_archivo.close()
 def crear_comuna(NombreNuevo, CodigoNuevo):
