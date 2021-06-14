@@ -78,26 +78,50 @@ for linea_leida in comunas_archivo:
         """,[int(CasosConfirmadosComuna), int(PoblacionComuna), int(CodReg)]
     )
 connection.commit()
-try:
-    cursor.execute(
-        """
-        CREATE OR REPLACE TRIGGER CasosNegativosRegion 
-        AFTER UPDATE ON CASOS_POR_REGION
-        FOR EACH ROW
-        BEGIN
-            IF :new.CasosConfirmados < 0 THEN
-                :new.CasosConfirmados = 0;
-            END IF;
-            If :new.Poblacion < 0 THEN
-                :new.Poblacion = 0;
-            END IF;
-        END
-        """
-        )
-    connection.commit()
-    
-except cx_Oracle.DatabaseError:
-    print("Trigger ya creado")
+def TriggerRegion():
+    try:
+        cursor.execute(
+            """
+            CREATE OR REPLACE TRIGGER Casos_Negativos_Region 
+            BEFORE UPDATE ON CASOS_POR_REGION
+            FOR EACH ROW
+            DECLARE
+            BEGIN
+                IF :NEW.CASOSCONFIRMADOS < 0 THEN
+                    :NEW.CASOSCONFIRMADOS := 0;
+                END IF;
+                If :NEW.POBLACION < 0 THEN
+                    :NEW.POBLACION := 0;
+                END IF;
+            END;
+            """
+    )
+    except cx_Oracle.DatabaseError:
+        print("Trigger region ya creado")
+
+
+def TriggerComuna():
+    try:
+        cursor.execute(
+            """
+            CREATE OR REPLACE TRIGGER Casos_Negativos_Comuna 
+            BEFORE UPDATE ON CASOS_POR_COMUNA
+            FOR EACH ROW
+            DECLARE
+            BEGIN
+                IF :NEW.CASOSCONFIRMADOS < 0 THEN
+                    :NEW.CASOSCONFIRMADOS := 0;
+                END IF;
+                If :NEW.POBLACION < 0 THEN
+                    :NEW.POBLACION := 0;
+                END IF;
+            END;
+            """
+    )
+    except cx_Oracle.DatabaseError:
+        print("Trigger comunas ya creado")
+connection.commit()
+
 regiones_archivo.close()
 comunas_archivo.close()
 def crear_comuna(NombreNuevo, CodigoNuevo):
@@ -620,6 +644,8 @@ print("12)Ver top 5 de contagios por región. \n")
 print("---------------------------------------------------------------------------------------------------------\n")
 accion=input("Ingrese su elección, ingrese 999 para terminar: \n")
 while(accion!="999"):
+    TriggerComuna()
+    TriggerRegion()
     if accion =="1":
         NewName=input("Ingrese nombre de la nueva comuna:\n")
         NewCode=input("Ingrese código de la nueva comuna:\n")
