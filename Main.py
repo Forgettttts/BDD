@@ -628,11 +628,11 @@ def mas_confirmados_region():
     print(tabla)
 
 
-def positividadRegional(cursor):
+def AlertaRegion():
 	try:
 		cursor.execute(
 			"""
-				SELECT CodigoRegion, NombreRegion , ROUND(((CASOS_CONFIRMADOS/POBLACION)*100),2) AS CONTAGIADOS_POR_REGION
+				SELECT CodigoRegion, NombreRegion , ROUND(((CasosConfirmados/Poblacion)*100),2) AS CONTAGIADOS_POR_REGION
                 FROM CASOS_POR_REGION 
                 WHERE POBLACION <> 0
 			""")
@@ -647,7 +647,7 @@ def positividadRegional(cursor):
 				cursor.execute(
 					"""
 						DELETE FROM CASOS_POR_REGION
-						WHERE ID_REGION = :1
+						WHERE CodigoRegion = :1
 					""", [informacion[0]])
 print("---------------------------------------------------------------------------------------------------------\n Bienvenido a la Base de datos Chilena del COVID-21 \n A contiuación se presentan varias opciones, seleccione a traves de su número cual quiere ejecutar:\n\n")
 
@@ -668,6 +668,7 @@ accion=input("Ingrese su elección, ingrese 999 para terminar: \n")
 while(accion!="999"):
     TriggerComuna()
     TriggerRegion()
+    AlertaRegion()
     if accion =="1":
         NewName=input("Ingrese nombre de la nueva comuna:\n")
         NewCode=input("Ingrese código de la nueva comuna:\n")
@@ -717,6 +718,8 @@ while(accion!="999"):
         mas_confirmados_region()
     else:
         print("Acción desconocida, revise bien la lista de opciones e intente nuevamente...\n")
+
+    AlertaRegion()
     accion = input("Ingrese su elección, ingrese 999 para terminar: \n")
 
 print("Sesion terminada\n")
