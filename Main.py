@@ -29,7 +29,7 @@ try:
         CodigoComuna NUMBER NOT NULL,
         Poblacion NUMBER NOT NULL,
         CasosConfirmados NUMBER NOT NULL,
-        CONSTRAINT FK_COMUNA FOREIGN KEY(CodigoRegion) REFERENCES CASOS_POR_REGION(CodigoRegion),
+        CONSTRAINT FK_COMUNA FOREIGN KEY(CodigoRegion) REFERENCES CASOS_POR_REGION(CodigoRegion) ON DELETE CASCADE,
         CONSTRAINT PK_COMUNA PRIMARY KEY(CodigoComuna)
     )
     """
@@ -627,6 +627,28 @@ def mas_confirmados_region():
     #se muestra la tabla
     print(tabla)
 
+
+def positividadRegional(cursor):
+	try:
+		cursor.execute(
+			"""
+				SELECT CodigoRegion, NombreRegion , ROUND(((CASOS_CONFIRMADOS/POBLACION)*100),2) AS CONTAGIADOS_POR_REGION
+                FROM CASOS_POR_REGION 
+                WHERE POBLACION <> 0
+			""")
+		fila_region_colapsada= cursor.fetchall()
+		info = fila_region_colapsada[0][0]
+	except Exception as err:
+		return
+	else:
+		for informacion in fila_region_colapsada:
+			if informacion[2] > 15:
+				print("La región de {} tiene mas de un 15 porciento de positividad, y será eliminada.".format(informacion[1]))
+				cursor.execute(
+					"""
+						DELETE FROM CASOS_POR_REGION
+						WHERE ID_REGION = :1
+					""", [informacion[0]])
 print("---------------------------------------------------------------------------------------------------------\n Bienvenido a la Base de datos Chilena del COVID-21 \n A contiuación se presentan varias opciones, seleccione a traves de su número cual quiere ejecutar:\n\n")
 
 print("1)Crear Comuna.")
