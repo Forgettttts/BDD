@@ -437,9 +437,8 @@ def combinar_comuna(CodigoPrimero, CodigoSegundo, CodigoAMantener):
             )
             #Sumamos en la region de destino
             cursor.execute(
-                """SELECT CodigoRegion, NombreRegion FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
-            CodDest, NomDest = cursor.fetchone()
-            print("Actualizando datos de la region de destino (", NomDest,")\n")
+                """SELECT CodigoRegion, NombreComuna FROM CASOS_POR_COMUNA WHERE CodigoComuna=:1""", [C1])
+            CodDest, nombrecomuna = cursor.fetchone()
             cursor.execute(
                 """
                 UPDATE CASOS_POR_REGION
@@ -723,6 +722,21 @@ while(accion!="999"):
         print("Acción desconocida, revise bien la lista de opciones e intente nuevamente...\n")
 
     AlertaRegion()
+
+    print("---------------------------------------------------------------------------------------------------------\n")
+    print("1)Crear Comuna.")
+    print("2)Crear región.")
+    print("3)Ver casos de alguna comuna.")
+    print("4)Ver casos de alguna región.")
+    print("5)Ver casos comunas.")
+    print("6)Ver casos regiónes.")
+    print("7)Añadir casos a una comuna.")
+    print("8)Eliminar casos en una comuna.")
+    print("9)Combinar comunas.")
+    print("10)Combinar regiones.")
+    print("11)Ver top 5, de contagios por comuna.")
+    print("12)Ver top 5 de contagios por región. \n")
+    print("---------------------------------------------------------------------------------------------------------\n")
     accion = input("Ingrese su elección, ingrese 999 para terminar: \n")
 
 print("Sesion terminada\n")
