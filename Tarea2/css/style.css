@@ -1,0 +1,36 @@
+body{
+    background-color: #543e5a;
+}
+
+.wrapper{
+    width: 900px;
+    margin: 0 auto;
+    background-color: #f70000;
+}
+
+h1,h2,h3,h4,h5,h6,p{
+    font-family: 'American Typewriter', serif;
+    color: #111;
+    line-height: 24px;
+}
+
+h1{
+    font-weight: 600;
+    font-size: 32px;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.index-intro{
+    width: 900px;
+    margin: 0 auto;
+    background-color: #ffffff;
+}
+
+ul.encabezado li {
+    display: inline;
+    list-style-type: none;
+    border: 1px solid #000;
+    margin: 5px;
+    padding: 2px;
+}
