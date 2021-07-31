@@ -13,25 +13,25 @@ if (isset($_POST["submit"])) {
     //* Comenzamos con el manejo de errores
 
     if (EntradaVacia($name, $username, $correo, $pwd, $pwd2)!== false) {
-        header(("location ../registrarse.php?error=EntradaVacia"));
+        header(("location: ../registrarse.php?error=EntradaVacia"));
         exit();
     }
     if (UsuarioInvalido($username)!== false) {
-        header(("location ../registrarse.php?error=UsuarioInvalido"));
+        header(("location: ../registrarse.php?error=UsuarioInvalido"));
         exit();
     }
     if (CorreoInvalido($correo)!== false) {
-        header(("location ../registrarse.php?error=CorreoInvalido"));
+        header(("location: ../registrarse.php?error=CorreoInvalido"));
         exit();
     }
     //? Si es que las contraseñas son distintas
     if (pwdMatch($pwd, $pwd2)!== false) {
-        header(("location ../registrarse.php?error=PasswordDistintas"));
+        header(("location: ../registrarse.php?error=PasswordDistintas"));
         exit();
     }
     //? Si es que el usuario ya existe
     if (UsuarioOcupado($conn, $username, $correo)!== false) {
-        header(("location ../registrarse.php?error=PasswordDistintas"));
+        header(("location: ../registrarse.php?error=UsuarioYaExistente"));
         exit();
     }
 
@@ -41,6 +41,6 @@ if (isset($_POST["submit"])) {
     CrearUsuario($conn, $name, $username, $correo, $pwd);
 }
 else {
-    header("location ../registrarse.php");
+    header("location: ../registrarse.php");
     exit();
 }

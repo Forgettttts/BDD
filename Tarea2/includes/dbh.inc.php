@@ -3,7 +3,7 @@
 $serverName = "localhost";
 $dBUserame = "root";
 $dBPassword = "";
-$dBName = "Tarea2"; //! REVISAR SI ES QUE ESTE ES EFECTIVAMENTE EL NOMBRE QUE DEBE TENER
+$dBName = "Tarea2";
 
 $conn = mysqli_connect($serverName, $dBUserame, $dBPassword, $dBName);
 

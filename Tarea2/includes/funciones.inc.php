@@ -74,7 +74,7 @@ function UsuarioOcupado($conn, $username, $correo){
     $sql="SELECT * FROM Usmer WHERE UserName=? OR Correo =?;";
     $stmt= mysqli_stmt_init($conn); // Iniciamos una accion en la conexion entregada
     if (!mysqli_stmt_prepare($stmt, $sql)) { //revisamos que la conecion no falle
-        header(("location ../registrarse.php?error=ConexionFallida"));
+        header(("location: ../registrarse.php?error=ConexionFallida"));
         exit();
     }
     mysqli_stmt_bind_param($stmt, "ss", $username, $correo);// "pegamos los datos de la tabla en stmt"
@@ -102,7 +102,7 @@ function CrearUsuario($conn, $name, $username, $correo, $pwd){
     $sql="INSERT INTO Usmer (Nombre, UserName, Correo, Contraseña, Seguidos, Seguidores) VALUES (?,?,?,?,0,0);";
     $stmt= mysqli_stmt_init($conn); // Iniciamos una accion en la conexion entregada
     if (!mysqli_stmt_prepare($stmt, $sql)) { //revisamos que la conecion no falle
-        header(("location ../registrarse.php?error=ConexionFallida"));
+        header(("location: ../registrarse.php?error=ConexionFallida"));
         exit();
     }
 
@@ -111,6 +111,6 @@ function CrearUsuario($conn, $name, $username, $correo, $pwd){
     mysqli_stmt_bind_param($stmt, "ssssii", $name, $username, $correo, $hashedPwd,0,0);// Ingresamos los datos
     mysqli_stmt_execute($stmt);//ejecutamos lo anterior
     mysqli_stmt_close($stmt);
-    header(("location ../registrarse.php?error=none"));
+    header(("location: ../registrarse.php?error=none"));
     exit();
 }
