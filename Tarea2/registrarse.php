@@ -9,9 +9,10 @@ include_once'header.php'
             <form action="includes/registro.inc.php" method="post">
                 <input type="text" name="nombre" placeholder="Nombre completo">
                 <input type="text" name="username" placeholder="Nombre de usuario">
+                <input type="text" name="correo" placeholder="Correo">
                 <input type="password" name="password" placeholder="Elija contraseña">
                 <input type="password" name="password2" placeholder="Repita su contraseña">
-                <button type="submit" name="registrar">Registrarme</button>
+                <button type="submit" name="submit">Registrarme</button>
             </form>
         </div>
     </section>

@@ -9,7 +9,7 @@ include_once'header.php'
             <form action="includes/identificacion.inc.php" method="post">
                 <input type="text" name="username" placeholder="Nombre de usuario">
                 <input type="password" name="password" placeholder="Contraseña">
-                <button type="submit" name="registrar">Ingresar</button>
+                <button type="submit" name="ingresar">Ingresar</button>
             </form>
         </div>
     </section>
