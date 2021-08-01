@@ -130,3 +130,22 @@ input[type='submit']{
 	margin-top: 22px;
 	border: none;
 }
+
+.wrapper section p{
+    text-align:center;
+    /* Haremos un fondo para la tabla*/
+    border: solid;
+    border-width: 1.5px;
+    background-color: #ff7e7e;
+    border-color: #ff0000;  /*Separacion entre la division y los bordes de la pagina*/
+    border-radius: 20px; 
+    padding: 10px;
+
+    color: rgb(0, 0, 0);
+    font: 28px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-weight: normal;
+        line-height: normal;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    white-space: pre-wrap;
+}
