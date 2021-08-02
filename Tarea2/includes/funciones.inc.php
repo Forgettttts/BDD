@@ -83,7 +83,7 @@ function UsuarioOcupado($conn, $username, $correo){
     $resultData= mysqli_stmt_get_result($stmt); //Obtenemos los datos extraidos de la tabla
 
     if ($row=mysqli_fetch_assoc($resultData)) { //Asociamos los datos extraidos a las variables de la bdd
-        return $row;
+        return $row; //Lo que retorna es la info del usuario que ya estaba en la BDD
     }
     else {
         $result=false;
@@ -112,4 +112,48 @@ function CrearUsuario($conn, $name, $username, $correo, $pwd){
     mysqli_stmt_close($stmt);
     header("location: ../registrarse.php?error=none");
     exit();
+}
+/*
+Funcion: EntradaVaciaLogin
+Funcionamiento: Revisa si es que alguno de los parametros esta vacio.
+Input: Parametros del formulario de login
+Ouput: Un booleano, True si es que alguno de los campos esta vacio, False si es que no
+*/
+function EntradaVaciaLogin($username, $pwd){
+    if (empty($username)||empty($pwd)){
+        $result=true;
+    }
+    else{
+        $result=false;
+    }
+    return $result;
+}
+
+/*
+Funcion: LoginUser
+Funcionamiento: Ingresa al usuario a su cuenta.
+Input: Parametros del formulario de login
+Ouput: none (solo hace login).
+*/
+function LoginUser($conn, $username, $pwd)
+{
+    $UsuarioExiste=UsuarioOcupado($conn, $username, $username); //? Si es que retorna false, es pq el usuario no se encontro
+    if ($UsuarioExiste==false) {
+        header("location: ../identificarse.php?error=UsuarioErroneo");
+        exit();
+    }
+    $pwdHashed = $UsuarioExiste["Contraseña"];
+    $chechPwd= password_verify($pwd, $pwdHashed);
+
+    if ($chechPwd===false) {
+        header("location: ../identificarse.php?error=ContraseñaErronea");
+        exit();
+    }
+    elseif ($chechPwd === true) { //* Igualdad absoluta
+        session_start();
+        $_SESSION["nombre"]=$UsuarioExiste["Nombre"];
+        $_SESSION["usuario"]=$UsuarioExiste["UserName"];
+        header("location: ../index.php");
+        exit();
+    }
 }
