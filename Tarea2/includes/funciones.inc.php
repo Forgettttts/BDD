@@ -157,3 +157,50 @@ function LoginUser($conn, $username, $pwd)
         exit();
     }
 }
+/*
+Funcion: LargoExcedido
+Funcionamiento:Comprueba si es que el msje a publicar no supera los 279 caracteres.
+Input: Mensaje del usmito a crear.
+Ouput: Booleano, true si es que es demasiado largo, false si es que no.
+*/
+function LargoExcedido($mensaje){
+    if (strlen($mensaje)>279) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+/*
+Funcion: VisibilidadErronea
+Funcionamiento: Comprueba si es que el usmito a publicar definio bien su visibilidad.
+Input: Visibilidad del usmito a crear.
+Ouput: Booleano, true si tiene visibilidad invalida, false si es que no.
+*/
+function VisibilidadErronea($visibilidad){
+    if (($visibilidad == "Publico") || ($visibilidad == "Público")|| ($visibilidad == "Close Friends")) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+/*
+Funcion: SubirUsmito
+Funcionamiento: Carga a la BDD el usmito.
+Input: Mensaje y visibilidad del usmito a crear.
+Ouput: none.
+*/
+function SubirUsmito($conn, $mensaje, $visibilidad, $usuario){
+    $sql="INSERT INTO Usmitos (Creador, Mensaje, Visibilidad) VALUES (?,?,?);";
+    $stmt= mysqli_stmt_init($conn); // Iniciamos una accion en la conexion entregada
+    if (!mysqli_stmt_prepare($stmt, $sql)) { //revisamos que la conecion no falle
+        header("location: ../registrarse.php?error=ConexionFallida");
+        exit();
+    }
+    mysqli_stmt_bind_param($stmt, "sss", $usuario, $mensaje, $visibilidad);// Ingresamos los datos
+    mysqli_stmt_execute($stmt);//ejecutamos lo anterior
+    mysqli_stmt_close($stmt);
+    header("location: ../index.php?error=none");
+    exit();
+}

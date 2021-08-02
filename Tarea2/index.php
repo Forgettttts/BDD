@@ -6,13 +6,20 @@ include_once'header.php'
     <div class="side"> <!-- Barra lateral izquierda -->
         <p>
             <b>Bienvenido</b>
-            AQUI COLOCAMOS EL NOMBRE DEL USUARIO
+            <?php echo $_SESSION["usuario"];?>
         </p>
         <h2>ACA COLOCAMOS LOS TAGS DEL USUARIO</h2>
     </div>
     <div class="main"><!-- Seccion central-->
-        <h1>Bienvenido!</h1>
-        <p>Aqui podrás ver lo que se esta hablando en el mundo, desde tu casa :D</p>
+    <?php
+    if (isset($_SESSION["usuario"])) {
+        include_once'usmitos.php';
+    }
+    else {
+        echo"<h1>Bienvenido!</h1>";
+        echo"<p>Inicia sesión para ver lo que se esta hablando en el mundo, desde tu casa :D</p>";
+    }
+    ?>
     </div>
 </div>
 

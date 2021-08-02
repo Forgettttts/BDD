@@ -1,3 +1,7 @@
+<?php 
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
     <head>
@@ -19,8 +23,16 @@
                 <ul class="opciones_encabezado">
                     <a href="index.php" class="active">Inicio</a>
                     <a href="tendencias.php">Tendencias</a><!--  Aqui tenemos que incluir las tendencias, con la vista-->
-                    <a href="identificarse.php" class="right">Identifícate</a>
-                    <a href="registrarse.php" class="right">Regístrate</a>
+                    <?php
+                    if (isset($_SESSION["usuario"])) {
+                        echo "<a href='includes/logout.inc.php' class='right'>Cerrar sesión de " . $_SESSION["usuario"] .  "</a>";
+                        echo "<a href='perfil.php' class='right'>Perfil</a>";
+                    }
+                    else {
+                        echo"<a href='identificarse.php' class='right'>Identifícate</a>";
+                        echo"<a href='registrarse.php' class='right'>Regístrate</a>";
+                    }
+                    ?>
                 </ul>
             </div>
         </nav>

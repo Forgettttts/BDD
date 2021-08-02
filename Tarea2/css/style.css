@@ -3,7 +3,6 @@
     box-sizing: border-box;
 }
 
-
 body{
     background-color:#006191 ;
     margin: 0;
@@ -60,7 +59,6 @@ h1{
     text-decoration: none;
 }
 
-
 /*Right-aligned link */
 .opciones_encabezado a.right {
     float: right;
@@ -103,7 +101,6 @@ h1{
     padding: 20px;
 }
 
-
 form {
 	padding: 50px 20px;
 	background-color: #ededed;
@@ -112,7 +109,6 @@ form {
 	padding-top: 28px;
 	margin-bottom: 30px
 }
-
 
 input {
 	width: calc(100% - 20px);

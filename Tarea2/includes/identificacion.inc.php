@@ -1,5 +1,5 @@
 <?php
-if (isset($_POST["submit"])) {
+if (isset($_POST["ingresar"])) {
     $username= $_POST["username"];
     $pwd=  $_POST["password"];
 
