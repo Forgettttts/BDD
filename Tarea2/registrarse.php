@@ -6,7 +6,7 @@ include_once'header.php'
     <section class="formulario-registro">
         <div>
             <h1>Registrate!</h1>
-            <form action="includes/registro.inc.php" method="post">
+            <form id="Formulario" action="includes/registro.inc.php" method="post">
                 <input type="text" name="nombre" placeholder="Nombre completo">
                 <input type="text" name="username" placeholder="Nombre de usuario">
                 <input type="text" name="correo" placeholder="Correo">

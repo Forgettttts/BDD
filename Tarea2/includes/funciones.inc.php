@@ -171,20 +171,23 @@ function LargoExcedido($mensaje){
         return false;
     }
 }
+
 /*
-Funcion: VisibilidadErronea
-Funcionamiento: Comprueba si es que el usmito a publicar definio bien su visibilidad.
-Input: Visibilidad del usmito a crear.
-Ouput: Booleano, true si tiene visibilidad invalida, false si es que no.
+Funcion: MensajeVacio
+Funcionamiento: Revisa si es que el mensaje esta vacio.
+Input: Mensaje a subir.
+Ouput: Un booleano, True si es que el msje esta vacio, False si es que no
 */
-function VisibilidadErronea($visibilidad){
-    if (($visibilidad == "Publico") || ($visibilidad == "Público")|| ($visibilidad == "Close Friends")) {
-        return false;
+function MensajeVacio($mensaje){
+    if (empty($mensaje)){
+        $result=true;
     }
-    else {
-        return true;
+    else{
+        $result=false;
     }
+    return $result;
 }
+
 /*
 Funcion: SubirUsmito
 Funcionamiento: Carga a la BDD el usmito.

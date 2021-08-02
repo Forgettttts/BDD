@@ -4,11 +4,17 @@ include_once'header.php'
 
 <div class="row">
     <div class="side"> <!-- Barra lateral izquierda -->
-        <p>
-            <b>Bienvenido</b>
-            <?php echo $_SESSION["usuario"];?>
-        </p>
-        <h2>ACA COLOCAMOS LOS TAGS DEL USUARIO</h2>
+        <?php
+        if (isset($_SESSION["usuario"])) {
+            echo "<p><b>Bienvenido</b> ". $_SESSION["usuario"]."!</p>";
+            echo "<h2>ACA COLOCAMOS LOS TAGS DEL USUARIO</h2>";
+        }
+        else {
+            echo"<h1>Bienvenido!</h1>";
+            echo"<p>Inicia sesión para ver tus tags</p>";
+        }
+        ?>
+        
     </div>
     <div class="main"><!-- Seccion central-->
     <?php
@@ -16,8 +22,8 @@ include_once'header.php'
         include_once'usmitos.php';
     }
     else {
-        echo"<h1>Bienvenido!</h1>";
-        echo"<p>Inicia sesión para ver lo que se esta hablando en el mundo, desde tu casa :D</p>";
+        echo"<h1>¿Tienes cuenta?</h1>";
+        echo"<p>Inicia sesión para ver lo que se esta hablando en el mundo, desde tu casa. Si no tienes cuenta ¡Create una!</p>";
     }
     ?>
     </div>

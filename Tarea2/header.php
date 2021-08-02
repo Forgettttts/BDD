@@ -27,6 +27,7 @@
                     if (isset($_SESSION["usuario"])) {
                         echo "<a href='includes/logout.inc.php' class='right'>Cerrar sesión de " . $_SESSION["usuario"] .  "</a>";
                         echo "<a href='perfil.php' class='right'>Perfil</a>";
+                        echo "<form id='BarraBusqueda' method='post'> <input type='text' name='busqueda' placeholder='Ingresa tu busqueda'> </form> ";
                     }
                     else {
                         echo"<a href='identificarse.php' class='right'>Identifícate</a>";

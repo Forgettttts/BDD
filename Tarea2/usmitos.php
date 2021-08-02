@@ -6,9 +6,18 @@ include_once'header.php'
     <section class="usmitos">
         <div>
             <h1>¿En que estas pensando?</h1>
-            <form action="includes/usmitacion.inc.php" method="post">
-                <textarea name="mensaje" placeholder="Expresate, hasta 279 caracteres"></textarea>
-                <input type="text" name="visibilidad" placeholder="¿Quién quieres que lo vea?">
+            <form id="Formulario" action="includes/usmitacion.inc.php" method="post">
+                <textarea class="ta" name="mensaje" placeholder="Expresate, hasta 279 caracteres"></textarea>
+                
+				<br><br>
+                <label for="visibilidad">¿Quién quieres que lo vea?</label>
+                <select name="Visibilidades" id="Visibilidades">
+                    <optgroup label="Opciones Visibilidad:">
+                    <option value="Público">Público</option>
+                    <option value="CloseFriends">Close Friends</option>
+                    </optgroup>
+                </select>
+				<br><br>
                 <button type="submit" name="Publicar">Publicar</button>
             <?php
             if (isset($_GET["error"])){
