@@ -26,6 +26,11 @@ h1{
     padding: 20px 0;
     text-align: center;
 }
+h1.TituloIndex{
+    font-weight: 600;
+    font-size: 32px;
+    text-align: center;
+}
 
 .index-intro{
     width: 900px;
@@ -109,6 +114,13 @@ h1{
 	padding-top: 28px;
 	margin-bottom: 30px
 }
+#NewPost{
+    padding: 50px 10px;
+	background-color: #ededed;
+	margin-top: 70px;
+	padding-top: 10px;
+	margin-bottom: 30px
+}
 
 input {
 	width: calc(100% - 20px);
@@ -168,14 +180,51 @@ button[type="submit"] {
     font-size: 15px;
     font-style:italic;
 }
-#BarraBusqueda{
+
+.busqueda{
     height: 40px;
-    width: 500px;
-    float: right;/*
-	background-color:#d5062881;
-    background-position: 0px 0px;
-    background-repeat: no-repeat;
-    background-image: url('https://cdn.icon-icons.com/icons2/933/PNG/512/searching-magnifying-glass_icon-icons.com_72568.png');
-    padding-left: 20px;
-    */
+    float: right;
+}
+
+.post-box{
+    border-style: inset;
+    padding: 10px;
+    margin: 10px;
+    background-color: skyblue;
+    border-radius: 10px;
+}
+
+.post-box .options-post-box{
+    margin-top: 50px;
+    display: block;
+    color: #004B85;
+}
+
+.post-box .options-post-box .respuesta-box{
+    border-style: solid;
+    text-align: center;
+    width: 15%;
+    display: inline-block;
+}
+
+
+.post-box .options-post-box .reusmeo-box{
+    border-style: solid;
+    text-align: center;
+    width: 15%;
+    display: inline-block;
+}
+
+.post-box .options-post-box .meencanta-box{
+    border-style: solid;
+    text-align: center;
+    width: 15%;
+    display: inline-block;
+}
+
+#NombrePublicador{
+	font-weight: bold;
+}
+#UsuarioPublicador{
+	font-style:italic;
 }

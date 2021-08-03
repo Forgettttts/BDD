@@ -153,6 +153,9 @@ function LoginUser($conn, $username, $pwd)
         session_start();
         $_SESSION["nombre"]=$UsuarioExiste["Nombre"];
         $_SESSION["usuario"]=$UsuarioExiste["UserName"];
+        $_SESSION["correo"]=$UsuarioExiste["Correo"];
+        $_SESSION["seguidos"]=$UsuarioExiste["Seguidos"];
+        $_SESSION["seguidores"]=$UsuarioExiste["Seguidores"];
         header("location: ../index.php");
         exit();
     }

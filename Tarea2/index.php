@@ -20,6 +20,7 @@ include_once'header.php'
     <?php
     if (isset($_SESSION["usuario"])) {
         include_once'usmitos.php';
+        include_once'publicaciones.php';
     }
     else {
         echo"<h1>¿Tienes cuenta?</h1>";

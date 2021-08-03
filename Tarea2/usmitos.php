@@ -5,9 +5,11 @@ include_once'header.php'
 <div class="wrapper">
     <section class="usmitos">
         <div>
-            <h1>¿En que estas pensando?</h1>
-            <form id="Formulario" action="includes/usmitacion.inc.php" method="post">
+            <h1 class="TituloIndex">¿En que estas pensando?</h1>
+            <form id="NewPost" action="includes/usmitacion.inc.php" method="post">
                 <textarea class="ta" name="mensaje" placeholder="Expresate, hasta 279 caracteres"></textarea>
+                
+                <input type="text" name="tags" placeholder="Ingresa tus tags">
                 
 				<br><br>
                 <label for="visibilidad">¿Quién quieres que lo vea?</label>
@@ -35,8 +37,3 @@ include_once'header.php'
             </form>
         </div>
     </section>
-</div>
-
-<?php
-include_once'footer.php'
-?>
