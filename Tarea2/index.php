@@ -7,7 +7,7 @@ include_once'header.php'
         <?php
         if (isset($_SESSION["usuario"])) {
             echo "<p><b>Bienvenido</b> ". $_SESSION["usuario"]."!</p>";
-            echo "<h2>ACA COLOCAMOS LOS TAGS DEL USUARIO</h2>";
+            echo "<h2>Top Tags:</h2>";
         }
         else {
             echo"<h1>Bienvenido!</h1>";

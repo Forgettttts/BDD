@@ -26,10 +26,12 @@ h1{
     padding: 20px 0;
     text-align: center;
 }
-h1.TituloIndex{
+h6{
+    
     font-weight: 600;
     font-size: 32px;
     text-align: center;
+    margin: 0 auto;
 }
 
 .index-intro{
@@ -117,7 +119,7 @@ h1.TituloIndex{
 #NewPost{
     padding: 50px 10px;
 	background-color: #ededed;
-	margin-top: 70px;
+	margin-top: 35px;
 	padding-top: 10px;
 	margin-bottom: 30px
 }
@@ -227,4 +229,16 @@ button[type="submit"] {
 }
 #UsuarioPublicador{
 	font-style:italic;
+}
+button[type="BotonEliminar"] {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background-color: red;
 }

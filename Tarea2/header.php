@@ -26,7 +26,7 @@
                     <a href="tendencias.php">Tendencias</a><!--  Aqui tenemos que incluir las tendencias, con la vista-->
                     <?php
                     if (isset($_SESSION["usuario"])) {
-                        echo "<a href='includes/logout.inc.php' class='right'>Cerrar sesión de " . $_SESSION["nombre"] .  "</a>";
+                        echo "<a href='includes/logout.inc.php' class='right'>Cerrar sesión de " . $_SESSION["usuario"] .  "</a>";
                         echo "<a href='perfil.php' class='right'>Perfil</a>";
                         echo "<form class='busqueda' method='post'> <input type='text' name='busqueda' placeholder='Ingresa tu busqueda'> </form> ";
                     }

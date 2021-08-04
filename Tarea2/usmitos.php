@@ -5,11 +5,11 @@ include_once'header.php'
 <div class="wrapper">
     <section class="usmitos">
         <div>
-            <h1 class="TituloIndex">¿En que estas pensando?</h1>
+            <h6>¿En que estas pensando?</h6>
             <form id="NewPost" action="includes/usmitacion.inc.php" method="post">
                 <textarea class="ta" name="mensaje" placeholder="Expresate, hasta 279 caracteres"></textarea>
                 
-                <input type="text" name="tags" placeholder="Ingresa tus tags">
+                <input type="text" name="tags" placeholder="Ingresa tus tags, separandolos con un espacio">
                 
 				<br><br>
                 <label for="visibilidad">¿Quién quieres que lo vea?</label>

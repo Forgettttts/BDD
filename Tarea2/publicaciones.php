@@ -4,7 +4,6 @@ include_once'header.php'
 
 
 <?php 
-
 require_once 'includes/dbh.inc.php';
 //? Ordenamos los psot en orden descendente, como cualquier feed
 $stmt = "SELECT * 
@@ -13,12 +12,11 @@ ORDER BY Fecha DESC";
 //? Creamos la accion dentro de la BDD
 $sql = mysqli_query($conn, $stmt);
 while ($publicaciones = mysqli_fetch_array($sql, MYSQLI_ASSOC)){ //? Iteramos sobre la tabla de Usmitos
-	$usuario = mysqli_real_escape_string($conn, $Usmitos['Creador']);//? Dentro de usmitos, en la fila actual, extraemos el usuario del creador
-	$IdPublicacion = mysqli_real_escape_string($conn, $Usmitos['Identificador']);//? Dentro de usmitos, en la fila actual, extraemos el Id de la publicacion
+	$usuario = mysqli_real_escape_string($conn, $publicaciones['Creador']);//? Dentro de usmitos, en la fila actual, extraemos el usuario del creador
+	$IdPublicacion = mysqli_real_escape_string($conn, $publicaciones['Identificador']);//? Dentro de pu$publicaciones, en la fila actual, extraemos el Id de la publicacion
 	$datosUsuario = mysqli_query($conn, "SELECT * FROM Usmer WHERE UserName = '$usuario'"); //? Buscamos los datos del creador, en base al nombre de usuario
 	$Publicador = mysqli_fetch_array($datosUsuario); //? Guardamos los datos del publicador
 	?>
-	<p>Intento de texto, <?php echo $Usmitos['Mensaje'];?></p>
 	<div class="wrapper">
 		<div class="post-box">
 			<br>
@@ -28,12 +26,12 @@ while ($publicaciones = mysqli_fetch_array($sql, MYSQLI_ASSOC)){ //? Iteramos so
 					<a id="UsuarioPublicador" href="profile.php?usuario=<?php echo $Publicador['UserName']?>"><?php echo '@'.$Publicador['UserName'];?></a>
 				</div>
 				<div class="fecha-box">
-					<a class="fecha" href="post.php?id=<?php echo $IdPublicacion?>"><?php echo $Usmitos['Fecha'];?></a>
+					<a class="fecha" ><?php echo $publicaciones['Fecha'];?></a>
 				</div>
 			</div>
 			<div class="text-post-box">
 				<div>
-					<p><?php echo $Usmitos['Mensaje'];?></p>
+					<p><?php echo $publicaciones['Mensaje'];?></p>
 				</div>
 			</div>
 

@@ -201,12 +201,54 @@ function SubirUsmito($conn, $mensaje, $visibilidad, $usuario){
     $sql="INSERT INTO Usmitos (Creador, Mensaje, Visibilidad) VALUES (?,?,?);";
     $stmt= mysqli_stmt_init($conn); // Iniciamos una accion en la conexion entregada
     if (!mysqli_stmt_prepare($stmt, $sql)) { //revisamos que la conecion no falle
-        header("location: ../registrarse.php?error=ConexionFallida");
+        header("location: ../publicaciones.php?error=ConexionFallida");
         exit();
     }
+
     mysqli_stmt_bind_param($stmt, "sss", $usuario, $mensaje, $visibilidad);// Ingresamos los datos
     mysqli_stmt_execute($stmt);//ejecutamos lo anterior
+
     mysqli_stmt_close($stmt);
     header("location: ../index.php?error=none");
+    return mysqli_insert_id($conn);
+}
+/*
+Funcion: HayTags
+Funcionamiento:Revisa si es que se cargaron tags.
+Input: Seccion de "tags" del formulario del post.
+Ouput: Booleano, true si es que hay tags, false si es que no.
+*/
+function HayTags($tags){
+    if (empty($tags)){
+        $result=false;
+    }
+    else{
+        $result=true;
+    }
+    return $result;
+}
+
+/*
+Funcion: SubirTags
+Funcionamiento: Carga a la BDD los tags.
+Input: tags del usmito, usuario creador y el id del usmito al cual pertenece.
+Ouput: none.
+*/
+function SubirTags($conn, $tags, $usuario, $IdPublicacion){
+    $sql="INSERT INTO Tags (Nombre, usmito, Creador) VALUES (?,?,?);";
+    $stmt= mysqli_stmt_init($conn); // Iniciamos una accion en la conexion entregada
+    if (!mysqli_stmt_prepare($stmt, $sql)) { //revisamos que la conecion no falle
+        header("location: ../publicaciones.php?error=ConexionFallida&usuario".$usuario);
+        exit();
+    }
+    
+    $SplitedTags=explode(' ', $tags);  // Separamos los tags
+    foreach ($SplitedTags as $tag) {
+        mysqli_stmt_bind_param($stmt, "sis", $tag, $IdPublicacion, $usuario);// Ingresamos los parametros a ejecutar
+        mysqli_stmt_execute($stmt);//ejecutamos, con cada tag
+    }
+
+    mysqli_stmt_close($stmt);
+    header("location: ../index.php?error=nonecontags");
     exit();
 }
