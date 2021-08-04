@@ -24,6 +24,9 @@ include_once'header.php'
                 else if (($_GET["error"])=="UsuarioYaExistente"){
                     echo "<p>Nombre de usuario ya existente, por favor, prueba con otro.</p>";
                 }
+                else if (($_GET["error"])=="LogInAgain"){
+                    echo "<p>Nombre de usuario cambiado con exito, inicie sesion nuevamente, por seguridad.</p>";
+                }
             }
             ?>
             </form>

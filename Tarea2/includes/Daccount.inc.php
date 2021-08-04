@@ -1,17 +1,22 @@
 <?php
-$user=$_SESSION["usuario"];
-
-
-$sql="DELETE FROM Usmers WHERE UserName =?);";
-$stmt= mysqli_stmt_init($conn); // Iniciamos una accion en la conexion entregada
-if (!mysqli_stmt_prepare($stmt, $sql)) { //revisamos que la conecion no falle
-    header("location: ../publicaciones.php?error=ConexionFallida");
+if (isset($_POST["UpdateCuenta"])) {
+    require_once 'dbh.inc.php';
+    require_once 'funciones.inc.php';
+    session_start();
+    $user= $_SESSION["usuario"];
+    $newUser= $_POST["newuser"];
+    $UsuarioExiste=UsuarioOcupado($conn, $username, $username); //? Si es que retorna false, es pq el usuario no se encontro
+    if ($UsuarioExiste==false) {
+        mysqli_query($conn, "UPDATE Usmer SET UserName = '$newUser' WHERE UserName = '$user'");
+        header("location: ../identificarse.php?error=LogInAgain");
+        exit();
+    }
+    else {
+        header('location: ../perfil.php?error=UsuarioOcupado');
+        exit();
+    }
+}
+else {
+    header("location: ../index.php");
     exit();
 }
-
-mysqli_stmt_bind_param($stmt, "s", $user);// Ingresamos los datos
-mysqli_stmt_execute($stmt);//ejecutamos lo anterior
-
-mysqli_stmt_close($stmt);
-header("location: ../index.php?error=none");
-return mysqli_insert_id($conn);

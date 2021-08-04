@@ -23,7 +23,6 @@
 
                 <ul class="opciones_encabezado">
                     <a href="index.php" class="active">Inicio</a>
-                    <a href="tendencias.php">Tendencias</a><!--  Aqui tenemos que incluir las tendencias, con la vista-->
                     <?php
                     if (isset($_SESSION["usuario"])) {
                         echo "<a href='includes/logout.inc.php' class='right'>Cerrar sesión de " . $_SESSION["usuario"] .  "</a>";

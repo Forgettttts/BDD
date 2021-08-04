@@ -238,7 +238,7 @@ function SubirTags($conn, $tags, $usuario, $IdPublicacion){
     $sql="INSERT INTO Tags (Nombre, usmito, Creador) VALUES (?,?,?);";
     $stmt= mysqli_stmt_init($conn); // Iniciamos una accion en la conexion entregada
     if (!mysqli_stmt_prepare($stmt, $sql)) { //revisamos que la conecion no falle
-        header("location: ../publicaciones.php?error=ConexionFallida&usuario".$usuario);
+        header("location: ../publicaciones.php?error=ConexionFallida");
         exit();
     }
     

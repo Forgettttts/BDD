@@ -21,14 +21,12 @@ if (isset($_POST["Publicar"])) {
 
     //* Si es que llegamos a este punto, es porque el usuario no cometio ningun error de input al ingresar al USMer
     $IdPublicacion=SubirUsmito($conn, $mensaje, $visibilidad, $_SESSION["usuario"]);
-    SubirTags($conn, $tags, $_SESSION["usuario"], $IdPublicacion);
-    /*
+    
     if(HayTags($tags)){
         SubirTags($conn, $tags, $_SESSION["usuario"], $IdPublicacion);
     }
-    */
 }
 else {
-    header("location: ../usmitos.php");
+    header("location: ../index.php");
     exit();
 }
